@@ -1,0 +1,92 @@
+<mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/26.2.2 Chrome/134.0.6998.178 Electron/35.1.2 Safari/537.36" version="26.2.2">
+  <diagram name="Página-1" id="5jZvQ3KQJmzvtHpUOqsf">
+    <mxGraphModel dx="1084" dy="643" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="ezxSts8ta102sGjIqSHR-75" value="Sortear os Pokémons" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="800" y="530" width="140" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="ezxSts8ta102sGjIqSHR-77" value="Importar Pokémon da PokeAPI" style="ellipse;whiteSpace=wrap;html=1;fontFamily=Helvetica;fontSize=11;fontColor=default;labelBackgroundColor=default;" vertex="1" parent="1">
+          <mxGeometry x="980" y="620" width="140" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="ezxSts8ta102sGjIqSHR-83" value="Listar Pokemons Player" style="ellipse;whiteSpace=wrap;html=1;fillColor=#97D077;" vertex="1" parent="1">
+          <mxGeometry x="550" y="790" width="140" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="ezxSts8ta102sGjIqSHR-88" value="Trocar Pokémon Player" style="ellipse;whiteSpace=wrap;html=1;fillColor=#97D077;" vertex="1" parent="1">
+          <mxGeometry x="550" y="876" width="140" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="ezxSts8ta102sGjIqSHR-106" value="Remover Pokemon" style="ellipse;whiteSpace=wrap;html=1;fillColor=#97D077;" vertex="1" parent="1">
+          <mxGeometry x="770" y="765" width="140" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="ezxSts8ta102sGjIqSHR-139" value="&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;" style="edgeStyle=none;shape=connector;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=default;align=center;verticalAlign=middle;fontFamily=Helvetica;fontSize=11;fontColor=default;labelBackgroundColor=default;endArrow=none;endFill=0;startFill=0;" edge="1" parent="1" source="ezxSts8ta102sGjIqSHR-109" target="ezxSts8ta102sGjIqSHR-113">
+          <mxGeometry x="0.0673" y="6" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ezxSts8ta102sGjIqSHR-109" value="ADM" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;fontFamily=Helvetica;fontSize=11;fontColor=default;labelBackgroundColor=default;" vertex="1" parent="1">
+          <mxGeometry x="450" y="705" width="30" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="ezxSts8ta102sGjIqSHR-113" value="Listar Pokemons" style="ellipse;whiteSpace=wrap;html=1;fillColor=#97D077;" vertex="1" parent="1">
+          <mxGeometry x="550" y="700" width="140" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="ezxSts8ta102sGjIqSHR-119" value="&amp;lt;&amp;lt;extends&amp;gt;&amp;gt;" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;strokeColor=default;align=center;fontFamily=Helvetica;fontSize=11;fontColor=default;labelBackgroundColor=default;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="ezxSts8ta102sGjIqSHR-113" target="ezxSts8ta102sGjIqSHR-106">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="-161" y="835" as="sourcePoint" />
+            <mxPoint x="-59" y="865" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ezxSts8ta102sGjIqSHR-125" value="&amp;lt;&amp;lt;include&lt;span style=&quot;background-color: light-dark(#ffffff, var(--ge-dark-color, #121212)); color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;&amp;gt;&amp;gt;&lt;/span&gt;" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;strokeColor=default;align=center;fontFamily=Helvetica;fontSize=11;fontColor=default;labelBackgroundColor=default;entryX=0.249;entryY=0.061;entryDx=0;entryDy=0;exitX=1;exitY=1;exitDx=0;exitDy=0;entryPerimeter=0;" edge="1" parent="1" source="ezxSts8ta102sGjIqSHR-75" target="ezxSts8ta102sGjIqSHR-77">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1000" y="550" as="sourcePoint" />
+            <mxPoint x="980" y="530" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ezxSts8ta102sGjIqSHR-142" style="edgeStyle=none;shape=connector;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeColor=default;align=center;verticalAlign=middle;fontFamily=Helvetica;fontSize=11;fontColor=default;labelBackgroundColor=default;startFill=0;endArrow=none;endFill=0;" edge="1" parent="1" source="ezxSts8ta102sGjIqSHR-140" target="ezxSts8ta102sGjIqSHR-83">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ezxSts8ta102sGjIqSHR-157" style="edgeStyle=none;shape=connector;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=default;align=center;verticalAlign=middle;fontFamily=Helvetica;fontSize=11;fontColor=default;labelBackgroundColor=default;startFill=0;endArrow=none;endFill=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="ezxSts8ta102sGjIqSHR-161" target="ezxSts8ta102sGjIqSHR-88">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="290" y="940" as="sourcePoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ezxSts8ta102sGjIqSHR-140" value="Front" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;fontFamily=Helvetica;fontSize=11;fontColor=default;labelBackgroundColor=default;" vertex="1" parent="1">
+          <mxGeometry x="450" y="795" width="30" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="ezxSts8ta102sGjIqSHR-144" value="Trocar Pokemon" style="ellipse;whiteSpace=wrap;html=1;fillColor=#97D077;" vertex="1" parent="1">
+          <mxGeometry x="760" y="620" width="140" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="ezxSts8ta102sGjIqSHR-146" value="&amp;lt;&amp;lt;extends&amp;gt;&amp;gt;" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;strokeColor=default;align=center;fontFamily=Helvetica;fontSize=11;fontColor=default;labelBackgroundColor=default;entryX=0;entryY=1;entryDx=0;entryDy=0;exitX=1;exitY=0;exitDx=0;exitDy=0;" edge="1" parent="1" source="ezxSts8ta102sGjIqSHR-113" target="ezxSts8ta102sGjIqSHR-144">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="460" y="705" as="sourcePoint" />
+            <mxPoint x="460" y="635" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ezxSts8ta102sGjIqSHR-148" value="&amp;lt;&amp;lt;include&lt;span style=&quot;background-color: light-dark(#ffffff, var(--ge-dark-color, #121212)); color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;&amp;gt;&amp;gt;&lt;/span&gt;" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;strokeColor=default;align=center;fontFamily=Helvetica;fontSize=11;fontColor=default;labelBackgroundColor=default;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" edge="1" parent="1" source="ezxSts8ta102sGjIqSHR-144" target="ezxSts8ta102sGjIqSHR-77">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1000" y="440" as="sourcePoint" />
+            <mxPoint x="820" y="580" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ezxSts8ta102sGjIqSHR-159" value="Sistema de Distribuicao" style="shape=umlFrame;whiteSpace=wrap;html=1;pointerEvents=0;fontFamily=Helvetica;fontSize=11;fontColor=default;labelBackgroundColor=default;width=150;height=30;" vertex="1" parent="1">
+          <mxGeometry x="530" y="520" width="610" height="450" as="geometry" />
+        </mxCell>
+        <mxCell id="ezxSts8ta102sGjIqSHR-165" style="edgeStyle=none;shape=connector;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeColor=default;align=center;verticalAlign=middle;fontFamily=Helvetica;fontSize=11;fontColor=default;labelBackgroundColor=default;startFill=0;endArrow=none;endFill=0;" edge="1" parent="1" source="ezxSts8ta102sGjIqSHR-160" target="ezxSts8ta102sGjIqSHR-75">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ezxSts8ta102sGjIqSHR-160" value="Login" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;fontFamily=Helvetica;fontSize=11;fontColor=default;labelBackgroundColor=default;" vertex="1" parent="1">
+          <mxGeometry x="450" y="535" width="30" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="ezxSts8ta102sGjIqSHR-161" value="ADM" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;fontFamily=Helvetica;fontSize=11;fontColor=default;labelBackgroundColor=default;" vertex="1" parent="1">
+          <mxGeometry x="450" y="881" width="30" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="ezxSts8ta102sGjIqSHR-167" style="edgeStyle=none;shape=connector;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=default;align=center;verticalAlign=middle;fontFamily=Helvetica;fontSize=11;fontColor=default;labelBackgroundColor=default;startFill=0;endArrow=none;endFill=0;" edge="1" parent="1" source="ezxSts8ta102sGjIqSHR-166" target="ezxSts8ta102sGjIqSHR-159">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ezxSts8ta102sGjIqSHR-166" value="BD&lt;div&gt;&lt;br&gt;&lt;/div&gt;" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;fontFamily=Helvetica;fontSize=11;fontColor=default;labelBackgroundColor=default;" vertex="1" parent="1">
+          <mxGeometry x="1200" y="715" width="30" height="60" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
