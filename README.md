@@ -15,4 +15,4 @@ Responsável por escolher cinco Pokémons aleatórios, disponibilizados pela [**
 
 ## Documentação
 ### Primeira Versão do UML
-![](documentacao/UML/UML_tema_2.drawio.png)
+![](documentacao/UML/UML_tema_.drawio.png)
