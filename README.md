@@ -8,6 +8,11 @@ Responsável por escolher cinco Pokémons aleatórios, disponibilizados pela [**
 |--------|-------------|
 |Felipe Ferreira|380|
 |Felipe Silva Loschi|601|
+|Henrique Oliveira Camppelo|367|
 |Pedro Henrique Duarte|210|
 |Pedro Henrique Ribeiro|529|
 |Vitor Algusto|459|
+
+## Documentação
+### Primeira Versão do UML
+![](documentacao/UML/UML_tema_2.drawio.png)
