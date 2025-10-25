@@ -37,4 +37,4 @@ Responsável por escolher cinco Pokémons aleatórios, disponibilizados pela [**
 - A classe **GestorCartas** não depende de uma implementação concreta de como buscar um Pokémon. Em vez disso, ela depende da abstração **GerenciadorAPI**.
 
 #### Demeter
-No momento que a classe **GestorCartas** possui um objeto da classe **GerenciadorAPI** ele aplica o principio de Demeter ao só utilizar métodos próprios, ou de objetos que foram passados como parâmetro.
+- No momento que a classe **GestorCartas** possui um objeto da classe **GerenciadorAPI** ele aplica o principio de Demeter ao só utilizar métodos próprios, ou de objetos que foram passados como parâmetro.
