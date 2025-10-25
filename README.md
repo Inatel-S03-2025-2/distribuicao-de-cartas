@@ -15,6 +15,7 @@ Responsável por escolher cinco Pokémons aleatórios, disponibilizados pela [**
 
 ## Documentação
 ### UML
+![](documentacao/UML/UML_tema_2.drawio.png)
 
 
 ### Aplicação do Princípio SOLIDD
