@@ -1,4 +1,5 @@
 import requests
+from pokemon.Pokemon import Pokemon
 
 class GestorAPI():
     def __init__(self, api_url="https://pokeapi.co/api/v2/"):
@@ -34,12 +35,8 @@ class GestorAPI():
                 nome = dados_json['name'].capitalize()
                 pokedex_id = dados_json['id']
                 
-                # TODO: Mudar para objeto pokemon
-                pokemon_dict ={ 
-                    nome:nome,
-                    pokedex_id:pokedex_id,
-                }
-                return pokemon_dict
+                pokemon = Pokemon(numero_pokedex=pokedex_id, nome=nome)
+                return pokemon
             
             elif response.status_code == 404:
                 print(f"Erro: Pokémon com o número {numero_pokedex} não encontrado.")
