@@ -17,6 +17,7 @@ class GestorCartas:
         else:
             return "Formato inválido! Use 'json'."
 
+    # FIXME: por enquanto retorna um booleano, mas deve ser alterado futuramente para statusDistribuicao
     def trocarPokemonADM(self, pokemon_origem, pokemon_destino):
         """
         Método para administrador trocar pokémons no sistema.
@@ -41,6 +42,7 @@ class GestorCartas:
             print(f"Erro na troca de pokémon (ADM): {e}")
             return False
 
+    # FIXME: por enquanto retorna um booleano, mas deve ser alterado futuramente para statusDistribuicao
     def trocarPokemonPlayer(self, indice_origem, pokemon_destino):
         """
         Método para jogador trocar pokémon por índice.
