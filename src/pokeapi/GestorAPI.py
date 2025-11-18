@@ -7,7 +7,7 @@ class GestorAPI():
 
     def conexãoAPI(self):
         try:
-            response = requests.get(self.base_url, timeout=5)
+            response = requests.get(self.api_url, timeout=5)
             
             if response.status_code == 200:
                 print("Conexão realizada.")
