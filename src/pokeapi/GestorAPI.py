@@ -1,5 +1,5 @@
 import requests
-from pokemon.Pokemon import Pokemon
+from src.pokemon.Pokemon import Pokemon
 
 class GestorAPI():
     def __init__(self, api_url="https://pokeapi.co/api/v2/"):
