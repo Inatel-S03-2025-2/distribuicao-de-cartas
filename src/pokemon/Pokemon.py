@@ -1,5 +1,5 @@
 class Pokemon:
-    def __init__(self, numero_pokedex: int, nome: str):
+    def __init__(self, nome: str, numero_pokedex: int):
         self.__numero_pokedex = numero_pokedex
         self.__nome = nome
 
