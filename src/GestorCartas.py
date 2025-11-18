@@ -14,7 +14,8 @@ class GestorCartas:
         for p in self.__pokemons:
             dicionario.append({
                 "numero_pokedex": p.get_numero_pokedex(),
-                "nome": p.get_nome()
+                "nome": p.get_nome(),
+                "isShiny": p.get_isShiny()
             })
 
         if formato.lower() == "json":
@@ -82,7 +83,9 @@ class GestorCartas:
                 if dados_pokemon:
                     nome = dados_pokemon['name']
                     numero_pokedex = dados_pokemon['id']
-                    novo_pokemon = pkmn.Pokemon(nome, numero_pokedex)
+                    # 1/8192 de chance de ser shiny (~0.012%)
+                    isShiny = random.randint(1, 8192) == 1
+                    novo_pokemon = pkmn.Pokemon(nome, numero_pokedex, isShiny)
                     self.__pokemons.append(novo_pokemon)
                     pokemons.append(pokemon_id)
                     status.sucesso(f"{nome} adicionado com sucesso.")
