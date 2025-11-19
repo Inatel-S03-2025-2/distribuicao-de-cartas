@@ -1,4 +1,5 @@
 import requests
+from src.pokemon.Pokemon import Pokemon
 
 class GestorAPI():
     def __init__(self, api_url="https://pokeapi.co/api/v2/"):
@@ -6,7 +7,7 @@ class GestorAPI():
 
     def conexãoAPI(self):
         try:
-            response = requests.get(self.base_url, timeout=5)
+            response = requests.get(self.api_url, timeout=5)
             
             if response.status_code == 200:
                 print("Conexão realizada.")
@@ -20,7 +21,7 @@ class GestorAPI():
             return False
 
     def getPokemon(self, numero_pokedex: int):
-        if not GestorAPI.conexãoAPI():
+        if not self.conexãoAPI():
             print("Erro de Conexão com a API")
             return None
              
@@ -30,16 +31,7 @@ class GestorAPI():
             
             if response.status_code == 200:
                 dados_json = response.json()
-                
-                nome = dados_json['name'].capitalize()
-                pokedex_id = dados_json['id']
-                
-                # TODO: Mudar para objeto pokemon
-                pokemon_dict ={ 
-                    nome:nome,
-                    pokedex_id:pokedex_id,
-                }
-                return pokemon_dict
+                return dados_json
             
             elif response.status_code == 404:
                 print(f"Erro: Pokémon com o número {numero_pokedex} não encontrado.")

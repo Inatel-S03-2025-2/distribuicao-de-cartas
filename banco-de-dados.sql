@@ -5,7 +5,8 @@ USE distribuicao_de_cartas;
 -- Tabela de Pokémons
 CREATE TABLE IF NOT EXISTS Pokemon (
     idPokemon INT AUTO_INCREMENT PRIMARY KEY,
-    nomePokemon VARCHAR(25) NOT NULL
+    nomePokemon VARCHAR(25) NOT NULL,
+    isShiny BOOLEAN DEFAULT FALSE
 );
 
 -- Tabela de Usuários

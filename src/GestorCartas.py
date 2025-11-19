@@ -1,4 +1,9 @@
 import json
+import random
+
+import src.pokeapi.GestorAPI as gapi
+import src.pokemon.Pokemon as pkmn
+import src.status.StatusDistribuicao as sd
 
 class GestorCartas:
     def __init__(self):
@@ -9,7 +14,8 @@ class GestorCartas:
         for p in self.__pokemons:
             dicionario.append({
                 "numero_pokedex": p.get_numero_pokedex(),
-                "nome": p.get_nome()
+                "nome": p.get_nome(),
+                "isShiny": p.get_isShiny()
             })
 
         if formato.lower() == "json":
@@ -65,3 +71,35 @@ class GestorCartas:
         except Exception as e:
             print(f"Erro na troca de pokémon (Player): {e}")
             return False
+    
+    def gerarPokemonsIniciais(self):
+        pokemons = []
+        gestor = gapi.GestorAPI()
+        status = sd.StatusDistribuicao()
+        while len(pokemons) < 5:
+            pokemon_id = random.randint(1, 1025)
+            if pokemon_id not in pokemons:
+                dados_pokemon = gestor.getPokemon(pokemon_id)
+                if dados_pokemon:
+                    nome = dados_pokemon['name']
+                    numero_pokedex = dados_pokemon['id']
+                    # 1/8192 de chance de ser shiny (~0.012%)
+                    isShiny = random.randint(1, 8192) == 1
+                    novo_pokemon = pkmn.Pokemon(nome, numero_pokedex, isShiny)
+                    self.__pokemons.append(novo_pokemon)
+                    pokemons.append(pokemon_id)
+                    status.sucesso(f"{nome} adicionado com sucesso.")
+                else:
+                    status.erro(f"Falha ao obter dados para o Pokémon com ID {pokemon_id}.")
+        return status.sucesso("Geração de pokémons concluída com sucesso.")
+    #TODO: Mandar a lista de pokémons para o Banco de Dados
+    
+    def removerPokemon(self, pokemon):
+        try:
+            self.__pokemons.remove(pokemon)
+            return sd.StatusDistribuicao().sucesso(f"{pokemon.get_nome()} removido com sucesso.")
+        except ValueError:
+            return sd.StatusDistribuicao().erro(f"{pokemon.get_nome()} não encontrado na lista.")
+        except Exception as e:
+            return sd.StatusDistribuicao().erro(f"Erro ao remover pokémon: {e}")
+        #TODO: Remover o pokémon do Banco de Dados
