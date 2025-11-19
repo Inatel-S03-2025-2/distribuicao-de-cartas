@@ -42,7 +42,7 @@ Responsável por escolher cinco Pokémons aleatórios, disponibilizados pela [**
 Para garantir a manutenibilidade e testabilidade, optamos por uma arquitetura baseada em **SOA - Service-Oriented Architecture**, *e o padrão de projeto ainda esta em debate*.
 
 ### 🔗 Diagrama de Uso e Classe
-![UML do Projeto](documentacao\UML\UML_tema_2.drawio.png)
+![UML do Projeto](documentacao/UML/UML_tema_2.drawio.png)
 
 ### 👷‍♂️ SOA
 Adotamos **SOA** para estruturar o sistema de Distribuição de Cartas como um serviço autônomo. A classe GestorCartas utiliza a lógica de negócio, segregando responsabilidades críticas, o consumo de dados externos é isolado no GerenciadorAPI e a persistência no GerenciadorBD. Essa divisão garante que alterações na API externa ou no banco de dados não impactem o núcleo do sistema.
