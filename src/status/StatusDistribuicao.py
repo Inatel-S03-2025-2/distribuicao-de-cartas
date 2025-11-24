@@ -5,10 +5,12 @@ class StatusDistribuicao:
   def sucesso(self, nova_mensagem: str):
     self.__mensagem = nova_mensagem
     print(f"✅ {self.__mensagem}")
+    return self
 
   def erro(self, nova_mensagem: str):
     self.__mensagem = nova_mensagem
     print(f"❌ {self.__mensagem}")
+    return self
 
   def get_mensagem(self):
     return self.__mensagem
