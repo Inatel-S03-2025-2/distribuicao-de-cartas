@@ -6,7 +6,14 @@ import src.pokemon.Pokemon as pkmn
 import src.status.StatusDistribuicao as sd
 
 class GestorCartas:
-    def __init__(self):
+    _instance = None
+    def __new__(cls, *args, **kwargs):
+        if cls._instance is None:
+            cls._instance = super().__new__(cls)
+            cls._instance.__init_once(*args, **kwargs)
+        return cls._instance
+
+    def __init_once(self):
         self.__pokemons = []
 
     def listarPokemons(self, formato: str) -> str:
