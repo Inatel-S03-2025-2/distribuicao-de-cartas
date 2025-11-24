@@ -1,8 +1,15 @@
 import requests
 from src.pokemon.Pokemon import Pokemon
 
-class GestorAPI():
-    def __init__(self, api_url="https://pokeapi.co/api/v2/"):
+class GestorAPI:
+    _instance = None
+    def __new__(cls, *args, **kwargs):
+        if cls._instance is None:
+            cls._instance = super().__new__(cls)
+            cls._instance.__init_once(*args, **kwargs)
+        return cls._instance
+
+    def __init_once(self, api_url="https://pokeapi.co/api/v2/"):
         self.api_url = api_url
 
     def conexãoAPI(self):
