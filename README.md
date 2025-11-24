@@ -33,15 +33,15 @@ Responsável por escolher cinco Pokémons aleatórios, disponibilizados pela [**
 ```
 ‼️Work in progress‼️
 ```
-| Método | Endpoint | Descrição | Saida |
-|--------|----------|-----------|------------------|
-|GET     | /listarpokemons/{idPlayer} | Lista todos os 5 pokémons de um jogador | {json de listagem} |
-|POST    | /pokemonsiniciais/{idPlayer} | Sorteia os 5 pokémons iniciais para o jogador em questão | {json de criação} |
-|POST    | /admremovepokemon/{idPlayer}/{idPokemon} | Remove 1 pokémon do jogador, se o jogador não possuir o pokémon, nenhuma operação é realizada e um Status de Distribuição diferente é retornado | {StatusDistribuição} |
-|POST    | /admadicionapokemon/{idPlayer}/{idPokemon} | Adiciona 1 pokémon no inventario do jogador, se o jogador já possuir o pokémon, ou nenhum espaço livre, nenhuma operação é realizada e um Status de Distribuição diferente é retornado | {StatusDistribuição} |
-|POST    | /admtrocapokemon/{idPlayer}/{idPokemon1}/{idPokemon2} | Realiza a troca no inventario do jogador, removendo o pokémon 1 e adicionando o pokémon 2, se houver algum tipo de conflito, um Status de Distribuição diferente é retornado | {StatusDistribuição} |
-|POST    | /trocapokemon/{idPlayer1}/{idPokemon1}/{idPlayer2}/{idPokemon2} | Realiza a troca no inventario do jogador 1 com o jogador 2, removendo o pokémon 1 e adicionando o pokémon 2 e vice-e-versa, se houver algum tipo de conflito, um Status de Distribuição diferente é retornado | {StatusDistribuição} |
-|POST    | /removejogador/{idPlayer} | Remove completamente um jogador do banco de dados | {json de remoção} |
+| Método | Endpoint | Descrição | Entrada | Saida |
+|--------|----------|-----------|---------|-------|
+|GET     | /players/{id}/team | Lista todos os 5 pokémons de um jogador | - | {json de listagem} |
+|POST    | /players/{id}/sorteio | Sorteia os 5 pokémons iniciais para o jogador em questão | - | {json de criação} |
+|DELETE    | /players/{id}/team/{pokemonId} | Remove 1 pokémon do jogador, se o jogador não possuir o pokémon, nenhuma operação é realizada e um Status de Distribuição diferente é retornado | - | {StatusDistribuição} |
+|POST    | /players/{id}/team/{pokemonId} | Adiciona 1 pokémon no inventario do jogador, se o jogador já possuir o pokémon, ou nenhum espaço livre, nenhuma operação é realizada e um Status de Distribuição diferente é retornado | - | {StatusDistribuição} |
+|PATCH    | /players/{id}/team | Realiza a troca no inventario do jogador, removendo o pokémon 1 e adicionando o pokémon 2, se houver algum tipo de conflito, um Status de Distribuição diferente é retornado | ```{removed_pokemon_id, add_poke_id}``` | {StatusDistribuição} |
+|POST    | /trades | Realiza a troca no inventario do jogador 1 com o jogador 2, removendo o pokémon 1 e adicionando o pokémon 2 e vice-e-versa, se houver algum tipo de conflito, um Status de Distribuição diferente é retornado | ```{sender_id, sender_poke_id, receiver_id, receiver_poke_id}``` | {StatusDistribuição} |
+|DELETE    | /players/{id} | Remove completamente um jogador do banco de dados | - | {json de remoção} |
 
 ### Exemplo Json Status de Distribuição
 ```json
