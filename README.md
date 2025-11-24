@@ -33,9 +33,90 @@ Responsável por escolher cinco Pokémons aleatórios, disponibilizados pela [**
 ```
 ‼️Work in progress‼️
 ```
-| Método | Endpoint | Descrição | Exemplo de Saida |
+| Método | Endpoint | Descrição | Saida |
 |--------|----------|-----------|------------------|
-|GET     |/listarpokemons/{idPlayer}|Lista todos os 5 pokemons de um jogador| {json}|
+|GET     | /listarpokemons/{idPlayer} | Lista todos os 5 pokémons de um jogador | {json de listagem} |
+|POST    | /pokemonsiniciais/{idPlayer} | Sorteia os 5 pokémons iniciais para o jogador em questão | {json de criação} |
+|POST    | /admremovepokemon/{idPlayer}/{idPokemon} | Remove 1 pokémon do jogador, se o jogador não possuir o pokémon, nenhuma operação é realizada e um Status de Distribuição diferente é retornado | {StatusDistribuição} |
+|POST    | /admadicionapokemon/{idPlayer}/{idPokemon} | Adiciona 1 pokémon no inventario do jogador, se o jogador já possuir o pokémon, ou nenhum espaço livre, nenhuma operação é realizada e um Status de Distribuição diferente é retornado | {StatusDistribuição} |
+|POST    | /admtrocapokemon/{idPlayer}/{idPokemon1}/{idPokemon2} | Realiza a troca no inventario do jogador, removendo o pokémon 1 e adicionando o pokémon 2, se houver algum tipo de conflito, um Status de Distribuição diferente é retornado | {StatusDistribuição} |
+|POST    | /trocapokemon/{idPlayer1}/{idPokemon1}/{idPlayer2}/{idPokemon2} | Realiza a troca no inventario do jogador 1 com o jogador 2, removendo o pokémon 1 e adicionando o pokémon 2 e vice-e-versa, se houver algum tipo de conflito, um Status de Distribuição diferente é retornado | {StatusDistribuição} |
+|POST    | /removejogador/{idPlayer} | Remove completamente um jogador do banco de dados | {json de remoção} |
+
+### Exemplo Json Status de Distribuição
+```json
+{
+  "status": 201,
+  "message": "Operação realizada com sucesso",
+  "data": {
+    "player": "Ash Ketchum",
+    "operation": "ADDED",
+    "pokemon_name": "Charizard",
+    "is_shiny": true
+  }
+}
+```
+
+### Exemplo Json Listagem de Pokemons
+```json
+{
+  "status": 200,
+  "message": "Time adiquirido com sucesso",
+  "data": {
+    "player": "Ash Ketchum",
+    "operation": "LIST_TEAM",
+    "team": [
+      {
+        "pokemon_name": "Pikachu",
+        "is_shiny": true
+      },
+      {
+        "pokemon_name": "Charizard",
+        "is_shiny": false
+      },
+      {
+        "pokemon_name": "Gengar",
+        "is_shiny": false
+      },
+      {
+        "pokemon_name": "Lucario",
+        "is_shiny": false
+      },
+      {
+        "pokemon_name": "Snorlax",
+        "is_shiny": false
+      }
+    ]
+  }
+}
+```
+
+### Exemplo Json Remoção de Jogador
+```json
+{
+  "status": 200,
+  "message": "Jogador e seu time foram apagados do registro",
+  "data": {
+    "player": "Ash Ketchum",
+    "operation": "PLAYER_REMOVED",
+  }
+}
+```
+
+### Exemplo Json Criação de Jogador
+```json
+{
+  "status": 201,
+  "message": "Jogador cadastrado e time sorteado com sucesso",
+  "data": {
+    "player": "Gary Oak",
+    "operation": "PLAYER_CREATED",
+    "draft_status": "SUCCESS",
+    "draft_count": 5
+  }
+}
+```
+
 ---
 
 ## 🏗️ Arquitetura e Padrão de Projeto
