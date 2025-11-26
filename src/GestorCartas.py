@@ -110,3 +110,11 @@ class GestorCartas:
         except Exception as e:
             return sd.StatusDistribuicao().erro(f"Erro ao remover pokémon: {e}")
         #TODO: Remover o pokémon do Banco de Dados
+    
+    #TODO: Adicionar o pokémon ao Banco de Dados
+    def adicionarPokemon(self, pokemon):
+        try:
+            self.__pokemons.append(pokemon)
+            return sd.StatusDistribuicao().sucesso(f"{pokemon.get_nome()} adicionado com sucesso.")
+        except Exception as e:
+            return sd.StatusDistribuicao().erro(f"Erro ao adicionar pokémon: {e}")
