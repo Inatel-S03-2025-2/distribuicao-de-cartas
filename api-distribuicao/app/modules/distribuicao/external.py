@@ -1,5 +1,5 @@
 import requests
-from .models import Pokemon
+from ...core.pokemon import Pokemon
 
 class GestorAPI:
     _instance = None
