@@ -3,7 +3,8 @@ from sqlalchemy.exc import IntegrityError, NoResultFound
 
 from src.jogador.Jogador import Jogador
 from .models import UsuarioORM, UsuarioPokemonORM, PokemonORM, Pokemon
-from .adapters import pokemonToOrmAdapter, OrmTopokemonAdapter, UsuarioToOrmAdapter
+from .adapters import pokemonToOrmAdapter, OrmTopokemonAdapter, UsuarioToOrmAdapter, OrmToUsuarioAdapter
+
 
 class PokemonRepository:
     def __init__(self, db: Session):
@@ -63,9 +64,12 @@ class PokemonRepository:
 
     def existe(self, numero_pokedex: int) -> bool:
         """Verifica se um pokémon existe"""
-        return self.db.query(PokemonORM).filter(
-            PokemonORM.idPokemon == numero_pokedex
-        ).first() is not None
+        return (
+            self.db.query(PokemonORM)
+            .filter(PokemonORM.idPokemon == numero_pokedex)
+            .first()
+            is not None
+        )
 
 class UsuarioRepository:
     def __init__(self, db: Session):
@@ -89,10 +93,12 @@ class UsuarioRepository:
             raise ValueError(f"Erro ao adicionar usuário: {e}")
 
     def removeUsuario(self, usuario: Jogador):
-        """Remove um jogador. Erro se não existir."""
-        usuario_orm = self.db.query(UsuarioORM).filter(
-            UsuarioORM.idUsuario == usuario.get_id()
-        ).first()
+        """Remove um jogador."""
+        usuario_orm = (
+            self.db.query(UsuarioORM)
+            .filter(UsuarioORM.idUsuario == usuario.get_id())
+            .first()
+        )
 
         if usuario_orm is None:
             raise ValueError(
@@ -106,24 +112,29 @@ class UsuarioRepository:
             self.db.rollback()
             raise ValueError(f"Erro ao remover usuário: {e}")
 
-    def buscaPorId(self, id_usuario: int) -> UsuarioORM:
-        """Busca um usuário por ID"""
-        usuario_orm = self.db.query(UsuarioORM).filter(
-            UsuarioORM.idUsuario == id_usuario
-        ).first()
+    def buscaPorId(self, id_usuario: str) -> Jogador:
+        """Busca um usuário por ID."""
+        usuario_orm = (
+            self.db.query(UsuarioORM)
+            .filter(UsuarioORM.idUsuario == id_usuario)
+            .first()
+        )
 
         if usuario_orm is None:
             raise ValueError(
                 f"Usuário com ID {id_usuario} não encontrado"
             )
 
-        return usuario_orm
+        return OrmToUsuarioAdapter(usuario_orm)
 
-    def existe(self, id_usuario: int) -> bool:
-        """Verifica se um usuário existe"""
-        return self.db.query(UsuarioORM).filter(
-            UsuarioORM.idUsuario == id_usuario
-        ).first() is not None
+    def existe(self, id_usuario: str) -> bool:
+        """Verifica se o usuário existe."""
+        return (
+            self.db.query(UsuarioORM)
+            .filter(UsuarioORM.idUsuario == id_usuario)
+            .first()
+            is not None
+        )
 
 class UsuarioPokemonRepository:
     def __init__(self, db: Session, pokemon_repo: PokemonRepository, usuario_repo: UsuarioRepository):
@@ -131,18 +142,12 @@ class UsuarioPokemonRepository:
         self.pokemon_repo = pokemon_repo
         self.usuario_repo = usuario_repo
 
-    def adicionarPokemonJogador(self, id_usuario: int, pokemon: Pokemon):
-        """
-        Adiciona um pokémon à coleção do jogador.
-        Erro se a combinação já existir.
-        """
-        # Validar que o usuário existe
+    def adicionarPokemonJogador(self, id_usuario: str, pokemon: Pokemon):
+        """Adiciona um pokémon ao jogador."""
         if not self.usuario_repo.existe(id_usuario):
-            raise ValueError(
-                f"Usuário com ID {id_usuario} não encontrado"
-            )
+            raise ValueError(f"Usuário com ID {id_usuario} não encontrado")
 
-        # Validar que o Pokémon existe (retorna a entidade)
+        # Garante que o Pokémon existe
         pokemon_entidade = self.pokemon_repo.buscaPokeId(
             pokemon.get_numero_pokedex()
         )
@@ -161,16 +166,13 @@ class UsuarioPokemonRepository:
                 f"Usuário {id_usuario} já possui o Pokémon {pokemon.get_numero_pokedex()}"
             )
 
-    def removerPokemonJogador(self, id_usuario: int, id_pokemon: int) -> bool:
-        """
-        Remove um pokémon da coleção do jogador.
-        Retorna True se removido, False se não encontrado.
-        """
+    def removerPokemonJogador(self, id_usuario: str, id_pokemon: int) -> bool:
+        """Remove um pokémon da coleção do jogador."""
         try:
             relacao = (
                 self.db.query(UsuarioPokemonORM).filter(
                     UsuarioPokemonORM.idUsuario == id_usuario,
-                    UsuarioPokemonORM.idPokemon == id_pokemon
+                    UsuarioPokemonORM.idPokemon == id_pokemon,
                 ).one()
             )
 
@@ -181,12 +183,10 @@ class UsuarioPokemonRepository:
         except NoResultFound:
             return False
 
-    def listarPokemonsDoUsuario(self, id_usuario: int) -> list[Pokemon]:
-        """Retorna todos os pokémons de um usuário"""
+    def listarPokemonsDoUsuario(self, id_usuario: str) -> list[Pokemon]:
+        """Lista todos os pokémons de um usuário."""
         if not self.usuario_repo.existe(id_usuario):
-            raise ValueError(
-                f"Usuário com ID {id_usuario} não encontrado"
-            )
+            raise ValueError(f"Usuário com ID {id_usuario} não encontrado")
 
         relacoes = (
             self.db.query(UsuarioPokemonORM)
@@ -201,13 +201,12 @@ class UsuarioPokemonRepository:
 
         return pokemons
 
-    def usuarioPossuiPokemon(self, id_usuario: int, id_pokemon: int) -> bool:
-        """Verifica se um usuário possui determinado pokémon"""
+    def usuarioPossuiPokemon(self, id_usuario: str, id_pokemon: int) -> bool:
+        """Verifica se o usuário possui um Pokémon."""
         return (
             self.db.query(UsuarioPokemonORM)
             .filter(
                 UsuarioPokemonORM.idUsuario == id_usuario,
-                UsuarioPokemonORM.idPokemon == id_pokemon
-            )
-            .first() is not None
+                UsuarioPokemonORM.idPokemon == id_pokemon,
+            ).first() is not None
         )
