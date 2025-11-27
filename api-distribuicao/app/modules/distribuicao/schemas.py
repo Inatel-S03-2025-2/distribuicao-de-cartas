@@ -32,7 +32,7 @@ class StatusDistribuicao:
   
   def get_resumo(self):
     return {
-      "status:": self.get_status(),
-      "mensagem:": self.get_mensagem(),
-      "codigo:": self.get_codigo()
+      "status": self.get_status(),
+      "mensagem": self.get_mensagem(),
+      "codigo": self.get_codigo()
     }
