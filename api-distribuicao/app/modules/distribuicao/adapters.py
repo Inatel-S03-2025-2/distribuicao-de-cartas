@@ -1,6 +1,7 @@
-from .models import Pokemon, PokemonORM
+from src.jogador.Jogador import Jogador
+from .models import Pokemon, PokemonORM, UsuarioORM
 
-def pokemon_to_orm_adapter(pokemon: Pokemon) -> PokemonORM:
+def pokemonToOrmAdapter(pokemon: Pokemon) -> PokemonORM:
     """Converte um objeto de Pokemon padrão para um objeto ORM."""
     return PokemonORM(
         idPokemon=pokemon.get_numero_pokedex(),
@@ -8,10 +9,16 @@ def pokemon_to_orm_adapter(pokemon: Pokemon) -> PokemonORM:
         isShiny=pokemon.is_shiny()
     )
 
-def pokemon_orm_adapter(pokemon_orm: PokemonORM) -> Pokemon:
+def OrmTopokemonAdapter(pokemon_orm: PokemonORM) -> Pokemon:
     """Converte um objeto ORM para um objeto de Pokemon padrão"""
     return Pokemon(
         numero_pokedex=pokemon_orm.idPokemon, # Usando o ID do BD
         nome=pokemon_orm.nomePokemon,
         shiny=pokemon_orm.isShiny
+    )
+
+def UsuarioToOrmAdapter(usuario: Jogador) -> UsuarioORM:
+    """Converte um objeto Jogador padrão em um Jogador ORM"""
+    return UsuarioORM(
+        idUsuario=usuario.get_id()
     )
