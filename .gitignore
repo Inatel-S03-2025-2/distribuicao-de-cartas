@@ -1,2 +1,3 @@
 *.bkp
 .vscode/
+__pycache__/
