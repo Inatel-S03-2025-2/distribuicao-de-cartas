@@ -3,7 +3,7 @@ from sqlalchemy import Column, Integer, String, Boolean, ForeignKey
 from sqlalchemy.orm import relationship
 
 class Pokemon:
-    def __init__(self, numero_pokedex: int, nome: str, shiny: bool = False):
+    def __init__(self, numero_pokedex: int = 0, nome: str = 'missingno', shiny: bool = False):
         self.__numero_pokedex = numero_pokedex
         self.__nome = nome
         self.__shiny = shiny
