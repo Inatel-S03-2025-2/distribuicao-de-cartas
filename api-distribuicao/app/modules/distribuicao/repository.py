@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Session
-from sqlalchemy.exc import IntegrityError
+from sqlalchemy.exc import IntegrityError, NoResultFound
 
 from src.jogador.Jogador import Jogador
 from .models import UsuarioORM, UsuarioPokemonORM, PokemonORM, Pokemon
@@ -30,6 +30,21 @@ class PokemonRepository:
         except IntegrityError:
             self.db.rollback()
             raise ValueError(f"Erro ao adicionar pokemon: {pokemon}")
+
+    def removePokemon(self, pokemon: Pokemon):
+        """Remove um pokemon. Erro se não existir."""
+
+        pokemon_orm = self.db.query(PokemonORM).filter(
+            PokemonORM.idPokemon == pokemon.get_numero_pokedex()
+        ).first()
+
+        try:
+            self.db.delete(pokemon_orm)
+            self.db.commit()
+        except IntegrityError:
+            self.db.rollback()
+            raise ValueError(f"Erro ao remover pokemon: {pokemon}")
+
 
 
     def buscaPokeId(self, numero_pokedex: int) -> PokemonORM:
@@ -65,13 +80,26 @@ class UsuarioRepository:
             self.db.rollback()
             raise ValueError(f"Erro ao adicionar usuario: {usuario}")
 
+    def removeUsuario(self, usuario: Jogador):
+        """Remove um jogador. Erro se não existir."""
+        usuario_orm = self.db.query(UsuarioORM).filter(
+            UsuarioORM.idUsuario == usuario.get_id()
+        ).first()
+
+        try:
+            self.db.delete(usuario_orm)
+            self.db.commit()
+        except IntegrityError:
+            self.db.rollback()
+            raise ValueError(f"Erro ao remover usuario: {usuario}")
+
 
 class UsuarioPokemonRepository:
     def __init__(self, db: Session, pokemon_repo: PokemonRepository):
         self.db = db
         self.pokemon_repo = pokemon_repo
 
-    def adicionarPokemonUsuario(self, id_usuario: int, pokemon: Pokemon):
+    def adicionarPokemonJogador(self, id_usuario: int, pokemon: Pokemon):
         """Adiciona um pokemon ao jogador. Erro se ele já possuiir o pokemon com o mesmo id."""
         # garantindo primeiro que o Pokémon existe na tabela Pokemon
         pokemon_persisted = self.pokemon_repo.buscaPokeId(
@@ -90,3 +118,19 @@ class UsuarioPokemonRepository:
             self.db.rollback()
             raise ValueError(
                 "O usuário já tem esse Pokémon (combinação de ID de Usuário e ID de Pokémon já existente).")
+
+    def removerPokemonJogador(self, id_usuario: int, id_pokemon: int):
+        try:
+            relacao = (
+                self.db.query(UsuarioPokemonORM).filter(
+                    UsuarioPokemonORM.idUsuario == id_usuario,
+                    UsuarioPokemonORM.idPokemon == id_pokemon
+                ).one()
+            )
+
+            self.db.delete(relacao)
+            self.db.commit()
+            return True
+
+        except NoResultFound:
+            return False
