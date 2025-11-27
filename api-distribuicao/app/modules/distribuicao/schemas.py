@@ -36,3 +36,4 @@ class StatusDistribuicao:
       "mensagem": self.get_mensagem(),
       "codigo": self.get_codigo()
     }
+
