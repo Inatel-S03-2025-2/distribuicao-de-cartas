@@ -1,5 +1,6 @@
 import json
 import random
+import mysql.connector
 
 import src.pokeapi.GestorAPI as gapi
 import src.pokemon.Pokemon as pkmn
@@ -16,19 +17,34 @@ class GestorCartas:
     def __init_once(self):
         self.__pokemons = []
 
-    def listarPokemons(self, formato: str) -> str:
-        dicionario = []
-        for p in self.__pokemons:
-            dicionario.append({
-                "numero_pokedex": p.get_numero_pokedex(),
-                "nome": p.get_nome(),
-                "isShiny": p.get_isShiny()
-            })
+    def listarPokemons(self, idPlayer: int) -> str:
+        con = mysql.connector.connect(
+            host="localhost",
+            user="root",
+            password="",
+            database="distribuicao_de_cartas"
+        )
+        cursor = con.cursor(dictionary=True)
 
-        if formato.lower() == "json":
-            return json.dumps(dicionario, indent=4)
-        else:
-            return "Formato inválido! Use 'json'."
+        query = """
+                SELECT p.idPokemon   AS numero_pokedex,
+                       p.nomePokemon AS nome,
+                       p.isShiny     AS isShiny
+                FROM UsuarioPokemon up
+                         JOIN Pokemon p ON p.idPokemon = up.idPokemon
+                WHERE up.idUsuario = %s
+                """
+
+        cursor.execute(query, (idPlayer,))
+        resultado = cursor.fetchall()
+
+        for p in resultado:
+            p["isShiny"] = bool(p["isShiny"])
+
+        cursor.close()
+        con.close()
+
+        return json.dumps(resultado, indent=4)
 
     # FIXME: por enquanto retorna um booleano, mas deve ser alterado futuramente para statusDistribuicao
     def trocarPokemonADM(self, pokemon_origem, pokemon_destino):
