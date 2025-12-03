@@ -32,7 +32,7 @@ class PokemonORM(Base):
 class UsuarioORM(Base):
     __tablename__ = 'Usuario'
 
-    idUsuario = Column(Integer, primary_key=True, index=True)
+    idUsuario = Column(String(20), primary_key=True, index=True)
     nomeUsuario = Column(String(50), nullable=False)
 
     # Relação com UsuarioPokemon
@@ -43,7 +43,7 @@ class UsuarioPokemonORM(Base):
     __tablename__ = 'UsuarioPokemon'
 
     # As chaves primárias
-    idUsuario = Column(Integer, ForeignKey('Usuario.idUsuario', ondelete='CASCADE'), primary_key=True)
+    idUsuario = Column(String(20), ForeignKey('Usuario.idUsuario', ondelete='CASCADE'), primary_key=True)
     idPokemon = Column(Integer, ForeignKey('Pokemon.idPokemon', ondelete='CASCADE'), primary_key=True)
 
     # Definição dos relacionamentos
