@@ -28,6 +28,5 @@ def OrmToUsuarioAdapter(usuario_orm: UsuarioORM) -> Jogador:
     """"""
     return Jogador(
         id=usuario_orm.idUsuario,
-        pokemons=usuario_orm.pokemons_colecao,
-        log=Null
+        pokemons=usuario_orm.pokemons_colecao
     )
