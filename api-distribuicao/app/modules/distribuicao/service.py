@@ -4,6 +4,7 @@ import random
 from .external import GestorAPI
 from .models import Pokemon, UsuarioPokemonORM
 from .schemas import StatusDistribuicao, Status
+from .repository import PokemonRepository, UsuarioRepository, UsuarioPokemonRepository
 
 class GestorCartas:
     _instance = None
@@ -20,7 +21,7 @@ class GestorCartas:
 
 
 
-    def gerarPokemonsIniciais(self):
+    def gerarPokemonsIniciais(self, idJogador:str):
         sd = StatusDistribuicao()
         pokemon = Pokemon()
         pokemons_id = []
@@ -36,30 +37,53 @@ class GestorCartas:
                         pokemons_id.append(pokemon_id)
                     else:
                         pass
+            #------------------------------------------------------------------------
+            try:
+                UsuarioRepository.adicionaUsuario(idJogador)
+            except ValueError as e:
+                print(f"Erro: {e}")
+            #------------------------------------------------------------------------
+            try:
+                for p in pokemons:
+                    PokemonRepository.adicionaPokemon(p)
+            except ValueError as e:
+                print(f"Erro: {e}")
+            #------------------------------------------------------------------------
+            try:
+                for p in pokemons:
+                    UsuarioPokemonRepository.adicionarPokemonUsuario(idJogador, p)
+            except ValueError as e:
+                print(f"Erro: {e}")
+            #------------------------------------------------------------------------
             sd.set_status(Status.SUCESSO)
             sd.set_mensagem("Os 5 pokémons iniciais foram gerados com sucesso.")
             sd.set_codigo("200")
-            resultado = sd.get_resumo()
-            resultado["pokemons"] = pokemons
-            return resultado
+            status = sd.get_resumo()
+            status["pokemons"] = pokemons
+            return status
         except AttributeError as e:
             sd.set_status(Status.ERRO)
             sd.set_mensagem(f"Erro ao gerar pokémons iniciais: {e}")
             sd.set_codigo("500")
             return sd.get_resumo()
     
-    def adicionarPokemon(self, id_player: int, pokemon: Pokemon) -> dict:
+    def adicionarPokemon(self, idJogador: int, pokemon: Pokemon) -> dict:
         sd = StatusDistribuicao()
         
         try:
-            # Verifica se o usuário existe
-            usuario = self.__bd.usuario_repo.buscaUsuarioId(id_player)
-            
-            # Adiciona o Pokémon ao jogador
-            self.__bd.usuario_pokemon_repo.adicionarPokemonUsuario(id_player, pokemon)
-            
+            #------------------------------------------------------------------------
+            try:
+                PokemonRepository.adicionaPokemon(pokemon)
+            except ValueError as e:
+                print(f"Erro: {e}")
+            #------------------------------------------------------------------------
+            try:
+                UsuarioPokemonRepository.adicionarPokemonUsuario(idJogador, pokemon)
+            except ValueError as e:
+                print(f"Erro: {e}")
+            #------------------------------------------------------------------------
             sd.set_status(Status.SUCESSO)
-            sd.set_mensagem(f"{pokemon.get_nome()} foi adicionado à coleção do jogador {id_player}.")
+            sd.set_mensagem(f"{pokemon.get_nome()} foi adicionado à coleção do jogador {idJogador}.")
             sd.set_codigo("200")
             return sd.get_resumo()
             
@@ -78,46 +102,13 @@ class GestorCartas:
             return sd.get_resumo()
 
 
-    def removerPokemon(self, id_player: int, pokemon: Pokemon) -> dict:
-        """Remove um Pokémon da coleção de um jogador específico"""
+    def removerPokemon(self, idJogador: int, pokemon: Pokemon) :
         sd = StatusDistribuicao()
-        
         try:
-            # Verifica se o usuário existe
-            usuario = self.__bd.usuario_repo.buscaUsuarioId(id_player)
-            
-            # Busca a relação UsuarioPokemon
-            relacao = self.__bd.db.query(UsuarioPokemonORM).filter(
-                UsuarioPokemonORM.idUsuario == id_player,
-                UsuarioPokemonORM.idPokemon == pokemon.get_numero_pokedex()
-            ).first()
-            
-            if not relacao:
-                sd.set_status(Status.ERRO)
-                sd.set_mensagem(f"O jogador {id_player} não possui {pokemon.get_nome()} em sua coleção.")
-                sd.set_codigo("404")
-                return sd.get_resumo()
-            
-            # Remove a relação
-            self.__bd.db.delete(relacao)
-            self.__bd.db.commit()
-            
-            sd.set_status(Status.SUCESSO)
-            sd.set_mensagem(f"{pokemon.get_nome()} foi removido da coleção do jogador {id_player}.")
-            sd.set_codigo("200")
-            return sd.get_resumo()
-            
+            UsuarioPokemonRepository.removerPokemonJogador(idJogador, pokemon.get_numero_pokedex())
         except ValueError as e:
-            # Erros esperados (usuário não existe, etc)
-            sd.set_status(Status.ERRO)
-            sd.set_mensagem(str(e))
-            sd.set_codigo("400")
-            return sd.get_resumo()
-            
-        except Exception as e:
-            # Erros inesperados
-            self.__bd.db.rollback()
-            sd.set_status(Status.ERRO)
-            sd.set_mensagem(f"Erro inesperado ao remover Pokémon: {e}")
-            sd.set_codigo("500")
-            return sd.get_resumo()
+            print(f"Erro: {e}")
+        sd.set_status(Status.SUCESSO)
+        sd.set_mensagem(f"{pokemon.get_nome()} foi removido da coleção do jogador {idJogador}.")
+        sd.set_codigo("200")
+        return sd.get_resumo()
