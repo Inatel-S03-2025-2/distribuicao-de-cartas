@@ -1,9 +1,8 @@
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import IntegrityError, NoResultFound
 
-from ...core.jogador import Jogador
-from ...core.pokemon import Pokemon
-from .models import UsuarioORM, UsuarioPokemonORM, PokemonORM
+from src.jogador.Jogador import Jogador
+from .models import UsuarioORM, UsuarioPokemonORM, PokemonORM, Pokemon
 from .adapters import pokemonToOrmAdapter, UsuarioToOrmAdapter
 
 '''
@@ -39,9 +38,6 @@ class PokemonRepository:
             PokemonORM.idPokemon == pokemon.get_numero_pokedex()
         ).first()
 
-        if pokemon_orm is None:
-            raise ValueError(f"Pokémon com ID {pokemon.get_numero_pokedex()} não encontrado")
-
         try:
             self.db.delete(pokemon_orm)
             self.db.commit()
@@ -72,8 +68,8 @@ class UsuarioRepository:
             UsuarioORM.idUsuario == usuario.get_id()
         ).first()
 
-        if usuario_orm is not None:
-            raise ValueError(f"Usuário com ID {usuario.get_id()} já existe")
+        if usuario_orm is None:
+            raise ValueError(f"")
 
         novo_usuario_orm = UsuarioToOrmAdapter(usuario)
 
@@ -89,9 +85,6 @@ class UsuarioRepository:
         usuario_orm = self.db.query(UsuarioORM).filter(
             UsuarioORM.idUsuario == usuario.get_id()
         ).first()
-
-        if usuario_orm is None:
-            raise ValueError(f"Usuário com ID {usuario.get_id()} não encontrado")
 
         try:
             self.db.delete(usuario_orm)

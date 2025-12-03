@@ -1,41 +1,23 @@
-"""
-Main - Ponto de entrada da aplicação FastAPI
-"""
 from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
 
-from .modules.distribuicao.router import router as distribuicao_router
+app = FastAPI()
 
-
-# Inicializa a aplicação FastAPI
-app = FastAPI(
-    title="API de Distribuição de Pokémons",
-    description="Sistema de distribuição e gerenciamento de pokémons para jogadores",
-    version="1.0.0"
-)
-
-# Configuração de CORS
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],  # Em produção, especifique os domínios permitidos
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
-
-# Rota de health check
+# Rota principal (GET)
 @app.get("/")
 def home():
-    """
-    Health check endpoint.
-    Verifica se a API está funcionando.
-    """
-    return {
-        "status": "online",
-        "mensagem": "API de Distribuição de Pokémons está funcionando",
-        "versao": "1.0.0"
-    }
+    return {"mensagem": "Olá! Minha API está viva."}
 
+from modules.distribuicao.router import router as distribuicao_router
+app.include_router(distribuicao_router, prefix="/api", tags=["Distribuição"])
 
-# Incluir routers
-app.include_router(distribuicao_router)
+from modules.distribuicao.service import GestorCartas
+from modules.distribuicao.external import GestorAPI
+gestor_cartas = GestorCartas(GestorAPI(), None)
+
+resultado = gestor_cartas.gerarPokemonsIniciais()
+if resultado.get("status") == "sucesso":
+    pokemons = resultado.get("pokemons", [])
+    for p in pokemons:
+        print(f"Número da Pokédex: {p.get_numero_pokedex()}, Nome: {p.get_nome()}, Shiny: {p.is_shiny()}")
+else:
+    print(f"Erro: {resultado.get('mensagem')}")

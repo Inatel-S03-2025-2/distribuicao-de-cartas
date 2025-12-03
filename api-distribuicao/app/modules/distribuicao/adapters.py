@@ -1,6 +1,5 @@
-from ...core.jogador import Jogador
-from ...core.pokemon import Pokemon
-from .models import PokemonORM, UsuarioORM
+from src.jogador.Jogador import Jogador
+from .models import Pokemon, PokemonORM, UsuarioORM
 
 def pokemonToOrmAdapter(pokemon: Pokemon) -> PokemonORM:
     """Converte um objeto de Pokemon padrão para um objeto ORM."""

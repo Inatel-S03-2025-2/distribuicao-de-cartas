@@ -1,5 +1,5 @@
 import requests
-from .models import Pokemon
+from src.pokemon.Pokemon import Pokemon
 
 class GestorAPI:
     _instance = None
@@ -12,7 +12,7 @@ class GestorAPI:
     def __init_once(self, api_url="https://pokeapi.co/api/v2/"):
         self.api_url = api_url
 
-    def conexaoAPI(self):
+    def conexãoAPI(self):
         try:
             response = requests.get(self.api_url, timeout=5)
             
@@ -27,8 +27,8 @@ class GestorAPI:
             print(f"Ocorreu um erro de conexão: {e}")
             return False
 
-    def getPokemon(self, numero_pokedex: int, shiny=False) -> Pokemon:
-        if not self.conexaoAPI():
+    def getPokemon(self, numero_pokedex: int):
+        if not self.conexãoAPI():
             print("Erro de Conexão com a API")
             return None
              
@@ -38,19 +38,7 @@ class GestorAPI:
             
             if response.status_code == 200:
                 dados_json = response.json()
-                lista_forms = dados_json.get("forms", [])
-
-                if lista_forms:
-                    nome_pokemon = lista_forms[0]["name"]
-                else:
-                    nome_pokemon = "Nome Desconhecido"
-
-                pokemon = Pokemon(
-                    numero_pokedex=numero_pokedex,
-                    nome=nome_pokemon,
-                    shiny=shiny
-                )
-                return pokemon
+                return dados_json
             
             elif response.status_code == 404:
                 print(f"Erro: Pokémon com o número {numero_pokedex} não encontrado.")
@@ -63,25 +51,3 @@ class GestorAPI:
         except requests.exceptions.RequestException as e:
             print(f"Ocorreu um erro de conexão: {e}")
             return None
-        
-    def getMaxID(self) -> int:
-        if not self.conexaoAPI():
-            print("Erro de Conexão ao tentar buscar Max ID")
-            return 1025 # Fallback para Gen 9
-            
-        url = f"{self.api_url}pokemon-species/?limit=1"
-        
-        try:
-            response = requests.get(url, timeout=5)
-            
-            if response.status_code == 200:
-                dados = response.json()
-                # Retorna o total ou 1025 se a chave não existir
-                return dados.get("count", 1025)
-            else:
-                print(f"Erro ao buscar Max ID. Status: {response.status_code}")
-                return 1025 # Fallback para Gen 9
-                
-        except requests.exceptions.RequestException as e:
-            print(f"Exceção ao buscar Max ID: {e}")
-            return 1025 # Fallback para Gen 9
