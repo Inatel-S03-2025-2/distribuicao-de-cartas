@@ -44,16 +44,14 @@ class PokemonRepository:
             self.db.rollback()
             raise ValueError(f"Erro ao remover pokémon: {e}")
 
-    def buscaPokeId(self, numero_pokedex: int) -> Pokemon:
-        """Busca um Pokémon por ID e retorna entidade de domínio"""
+    def buscaPokeId(self, id_pokemon: int) -> Pokemon:
+        """Busca um Pokémon pelo ID da tabela e retorna entidade de domínio"""
         pokemon_orm = self.db.query(PokemonORM).filter(
-            PokemonORM.idPokemon == numero_pokedex
+            PokemonORM.idPokemon == id_pokemon
         ).first()
 
         if pokemon_orm is None:
-            raise ValueError(
-                f"Pokémon com ID {numero_pokedex} não encontrado"
-            )
+            raise ValueError(f"Pokémon com ID {id_pokemon} não encontrado")
 
         return OrmTopokemonAdapter(pokemon_orm)
 
@@ -188,18 +186,15 @@ class UsuarioPokemonRepository:
         if not self.usuario_repo.existe(id_usuario):
             raise ValueError(f"Usuário com ID {id_usuario} não encontrado")
 
-        relacoes = (
-            self.db.query(UsuarioPokemonORM)
+        # join para buscar os poke
+        resultados = (
+            self.db.query(PokemonORM)
+            .join(UsuarioPokemonORM, PokemonORM.idPokemon == UsuarioPokemonORM.idPokemon)
             .filter(UsuarioPokemonORM.idUsuario == id_usuario)
             .all()
         )
 
-        pokemons = []
-        for relacao in relacoes:
-            pokemon = self.pokemon_repo.buscaPokeId(relacao.idPokemon)
-            pokemons.append(pokemon)
-
-        return pokemons
+        return [OrmTopokemonAdapter(pokemon_orm) for pokemon_orm in resultados]
 
     def usuarioPossuiPokemon(self, id_usuario: str, id_pokemon: int) -> bool:
         """Verifica se o usuário possui um Pokémon."""
