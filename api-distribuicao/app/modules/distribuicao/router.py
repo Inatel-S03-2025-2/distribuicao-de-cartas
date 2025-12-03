@@ -35,40 +35,35 @@ class PokemonSchema(BaseModel):
     pokemon_id: int
     pokemon_shiny: bool
 
-
+#TODO:
 @router.get("/payers/{player_id}/team")
 def time_jogador(player_id: str):
-    time_pokemons = GestorCartas.
+    return
 
 @router.post("/players/{player_id}/distribution", response_model=DistribuicaoResponse)
 def distribuicao_inicial(player_id: str):
-    
-    return
+    status = GestorCartas.gerarPokemonsIniciais()
+    return status
+
+
+@router.post("/players/{player_id}/team")
+def adiciona_pokemon_jogador(player_id: str, dados_pokemon: PokemonSchema):
+    pokemon_adicionado = GestorAPI.getPokemon(
+        numero_pokedex=dados_pokemon.pokemon_id,
+        shiny=dados_pokemon.pokemon_shiny
+    )
+    status = GestorCartas.adicionarPokemon(player_id, pokemon_adicionado)
+    return status
 
 @router.delete("/players/{player_id}/team")
 def remove_pokemon_jogador(player_id: str, dados_pokemon: PokemonSchema):
 
-    id_pokemon = dados_pokemon.pokemon_id
+    pokemon_removido = GestorAPI.getPokemon(dados_pokemon.pokemon_id)
+    status = GestorCartas().removerPokemon(player_id, pokemon_removido)
 
-        
+    return status
 
-    GestorCartas().removerPokemon(player_id, pokemon_removido)
-
-    return
-
-@router.post("/players/{player_id}/team")
-def adiciona_pokemon_jogador(player_id: str, dados_pokemon: PokemonSchema):
-    
-    id_pokemon = dados_pokemon.pokemon_id
-    is_shiny = dados_pokemon.pokemon_shiny
-
-    pokemon_adicionado = GestorAPI().getPokemon(numero_pokedex=id_pokemon, shiny=is_shiny)
-
-    GestorCartas().adicionarPokemon(player_id, pokemon_adicionado)
-
-    return
-
-
+#TODO:
 @router.patch("/players/{player_id}/team")
 def troca_pokemons_jogador(player_id: int, dados_troca: TrocaPokemonSchema):
     
@@ -80,7 +75,7 @@ def troca_pokemons_jogador(player_id: int, dados_troca: TrocaPokemonSchema):
     
     return
 
-
+#TODO:
 @route.post("/trades")
 def troca_entre_players(dados_troca: TrocaPlayerSchema):
 
