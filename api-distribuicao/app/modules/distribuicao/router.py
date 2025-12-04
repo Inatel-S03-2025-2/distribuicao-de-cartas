@@ -1,8 +1,8 @@
 from fastapi import APIRouter
 from pydantic import BaseModel
 
-from app.modules.distribuicao.service import GestorCartas
-from app.modules.distribuicao.external import GestorAPI
+from modules.distribuicao.service import GestorCartas
+from modules.distribuicao.external import GestorAPI
 
 router = APIRouter()
 
