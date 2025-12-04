@@ -1,8 +1,7 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter
 from pydantic import BaseModel
 
 from app.modules.distribuicao.service import GestorCartas
-from app.modules.distribuicao.models import Pokemon
 from app.modules.distribuicao.external import GestorAPI
 
 router = APIRouter()
