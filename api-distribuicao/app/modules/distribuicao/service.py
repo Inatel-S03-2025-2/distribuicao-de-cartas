@@ -5,6 +5,7 @@ from modules.distribuicao.external import GestorAPI
 from modules.distribuicao.models import Pokemon
 from modules.distribuicao.schemas import StatusDistribuicao, Status
 from modules.distribuicao.repository import PokemonRepository, UsuarioRepository, UsuarioPokemonRepository
+from modules.distribuicao.repository import GerenciadorBD
 
 class GestorCartas:
     _instance = None
@@ -14,7 +15,7 @@ class GestorCartas:
             cls._instance.__init_once(*args, **kwargs)
         return cls._instance
 
-    def __init_once(self, api:GestorAPI, bd):
+    def __init_once(self, api:GestorAPI, bd:GerenciadorBD):
         self.__pokemons = []
         self.__api = api
         self.__bd = bd
@@ -37,19 +38,19 @@ class GestorCartas:
                         pass
             #------------------------------------------------------------------------
             try:
-                UsuarioRepository.adicionaUsuario(idJogador)
+                self.__bd.createJogador(idJogador)
             except ValueError as e:
                 print(f"Erro: {e}")
             #------------------------------------------------------------------------
             try:
                 for p in pokemons:
-                    PokemonRepository.adicionaPokemon(p)
+                    self.__bd.adicionarPokemon(p)
             except ValueError as e:
                 print(f"Erro: {e}")
             #------------------------------------------------------------------------
             try:
                 for p in pokemons:
-                    UsuarioPokemonRepository.adicionarPokemonUsuario(idJogador, p)
+                    self.__bd.adicionarPokemonAoJogador(idJogador, p)
             except ValueError as e:
                 print(f"Erro: {e}")
             #------------------------------------------------------------------------
@@ -71,12 +72,12 @@ class GestorCartas:
         try:
             #------------------------------------------------------------------------
             try:
-                PokemonRepository.adicionaPokemon(pokemon)
+                self.__bd.adicionarPokemon(pokemon)
             except ValueError as e:
                 print(f"Erro: {e}")
             #------------------------------------------------------------------------
             try:
-                UsuarioPokemonRepository.adicionarPokemonUsuario(idJogador, pokemon)
+                self.__bd.adicionarPokemonAoJogador(idJogador, pokemon)
             except ValueError as e:
                 print(f"Erro: {e}")
             #------------------------------------------------------------------------
@@ -103,7 +104,7 @@ class GestorCartas:
     def removerPokemon(self, idJogador: int, pokemon: Pokemon) :
         sd = StatusDistribuicao()
         try:
-            UsuarioPokemonRepository.removerPokemonJogador(idJogador, pokemon.get_numero_pokedex())
+            self.__bd.removerPokemonDoJogador(idJogador, pokemon)
         except ValueError as e:
             print(f"Erro: {e}")
         sd.set_status(Status.SUCESSO)
