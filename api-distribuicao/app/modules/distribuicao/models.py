@@ -4,10 +4,9 @@ from sqlalchemy.orm import relationship
 
 
 class Jogador:
-    # Adicionando o parametro 'nome'
     def __init__(self, id: str, nome: str = "", pokemons: list = None, log: str = ""):
         self.__id = id
-        self.__nome = nome  # Novo atributo
+        self.__nome = nome
         self.__pokemons = pokemons if pokemons is not None else []
         self.__log = log
 
