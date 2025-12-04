@@ -20,17 +20,63 @@ class GestorCartas:
         self.__api = api
         self.__bd = bd
 
-    class Jogador:
-        # Removido 'nome' e 'log' do __init__
-        def __init__(self, id: str, pokemons: list = None):
-            self.__id = id
-            self.__pokemons = pokemons if pokemons is not None else []
+    def obterTimeJogador(self, idJogador: str) -> dict:
+        """
+        Busca o jogador e seus pokémons e retorna o JSON formatado conforme especificação.
+        """
+        # Cria uma nova sessão de banco de dados para esta operação
+        db = SessionLocal()
 
-        def get_id(self):
-            return self.__id
+        try:
+            # Instancia os repositórios necessários
+            user_repo = UsuarioRepository(db)
+            poke_repo = PokemonRepository(db)
+            user_poke_repo = UsuarioPokemonRepository(db, poke_repo, user_repo)
 
-        def get_pokemons(self):
-            return self.__pokemons
+            # 1. Verifica se o usuário existe e pega seus dados (nome)
+            try:
+                jogador: Jogador = user_repo.buscaPorId(idJogador)
+            except ValueError:
+                # Usuário não encontrado
+                return {
+                    "status": 404,
+                    "message": f"Jogador com ID {idJogador} não encontrado.",
+                    "data": None
+                }
+
+            # 2. Busca a lista de Pokémons (Objetos de Domínio)
+            lista_pokemons = user_poke_repo.listarPokemonsDoUsuario(idJogador)
+
+            # 3. Formata a lista para o padrão do JSON solicitado
+            team_json = []
+            for p in lista_pokemons:
+                team_json.append({
+                    "pokemon_name": p.get_nome(),
+                    "is_shiny": p.is_shiny()
+                })
+
+            # 4. Monta a resposta final
+            response = {
+                "status": 200,
+                "message": "Time adquirido com sucesso",
+                "data": {
+                    "player": jogador.get_id(),  # Retorna ID do jogador
+                    "operation": "LIST_TEAM",
+                    "team": team_json
+                }
+            }
+
+            return response
+
+        except Exception as e:
+            return {
+                "status": 500,
+                "message": f"Erro interno ao buscar time: {str(e)}",
+                "data": None
+            }
+        finally:
+            # Fecha a conexão com o banco
+            db.close()
 
 
     def gerarPokemonsIniciais(self, idJogador:str):
