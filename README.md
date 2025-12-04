@@ -30,13 +30,10 @@ Responsável por escolher cinco Pokémons aleatórios, disponibilizados pela [**
 ---
 
 ## 🎯 Endpoints
-```
-‼️Work in progress‼️
-```
 | Método | Endpoint | Descrição | Entrada | Saida |
 |--------|----------|-----------|---------|-------|
 |GET     | /players/{id}/team | Lista todos os 5 pokémons de um jogador | - | {json de listagem} |
-|POST    | /players/{id}/sorteio | Sorteia os 5 pokémons iniciais para o jogador em questão | - | {json de criação} |
+|POST    | /players/{id}/distribution | Sorteia os 5 pokémons iniciais para o jogador em questão | - | {json de criação} |
 |DELETE    | /players/{id}/team/{pokemonId} | Remove 1 pokémon do jogador, se o jogador não possuir o pokémon, nenhuma operação é realizada e um Status de Distribuição diferente é retornado | - | {StatusDistribuição} |
 |POST    | /players/{id}/team/{pokemonId} | Adiciona 1 pokémon no inventario do jogador, se o jogador já possuir o pokémon, ou nenhum espaço livre, nenhuma operação é realizada e um Status de Distribuição diferente é retornado | - | {StatusDistribuição} |
 |PATCH    | /players/{id}/team | Realiza a troca no inventario do jogador, removendo o pokémon 1 e adicionando o pokémon 2, se houver algum tipo de conflito, um Status de Distribuição diferente é retornado | ```{removed_pokemon_id, add_poke_id}``` | {StatusDistribuição} |
