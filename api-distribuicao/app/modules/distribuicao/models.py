@@ -1,4 +1,4 @@
-from ...shared.database import Base
+from shared.database import Base
 from sqlalchemy import Column, Integer, String, Boolean, ForeignKey
 from sqlalchemy.orm import relationship
 
@@ -16,6 +16,19 @@ class Pokemon:
 
     def is_shiny(self):
         return self.__shiny
+
+class Jogador:
+    def __init__(self, id: str, pokemons: list, log: str):
+        self.__id = id
+        self.__pokemons = pokemons  # lista de objetos Pokemon
+        self.__log = log
+
+    def get_id(self):
+        return self.__id
+    def get_pokemons(self):
+        return self.__pokemons
+    def get_log(self):
+        return self.__log
 
 # classe table pokemon bd
 class PokemonORM(Base):
