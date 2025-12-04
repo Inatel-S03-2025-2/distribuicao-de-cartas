@@ -2,7 +2,7 @@ import json
 import random
 
 from .external import GestorAPI
-from .models import Pokemon
+from .models import Pokemon, Jogador
 from .schemas import StatusDistribuicao, Status
 from .repository import PokemonRepository, UsuarioRepository, UsuarioPokemonRepository
 from ...shared.database import SessionLocal
