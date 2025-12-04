@@ -2,6 +2,21 @@ from ...shared.database import Base
 from sqlalchemy import Column, Integer, String, Boolean, ForeignKey
 from sqlalchemy.orm import relationship
 
+class Jogador:
+    def __init__(self, id: str, pokemons: list = None, log: str = ""):
+        self.__id = id
+        self.__pokemons = pokemons if pokemons is not None else []
+        self.__log = log
+
+    def get_id(self):
+        return self.__id
+    
+    def get_pokemons(self):
+        return self.__pokemons
+    
+    def get_log(self):
+        return self.__log
+
 class Pokemon:
     def __init__(self, numero_pokedex: int = 0, nome: str = 'missingno', shiny: bool = False):
         self.__numero_pokedex = numero_pokedex
