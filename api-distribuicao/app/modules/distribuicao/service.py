@@ -1,11 +1,11 @@
 import json
 import random
 
-from modules.distribuicao.external import GestorAPI
-from modules.distribuicao.models import Pokemon
-from modules.distribuicao.schemas import StatusDistribuicao, Status
-from modules.distribuicao.repository import PokemonRepository, UsuarioRepository, UsuarioPokemonRepository
-from modules.distribuicao.repository import GerenciadorBD
+from .external import GestorAPI
+from .models import Pokemon
+from .schemas import StatusDistribuicao, Status
+from .repository import PokemonRepository, UsuarioRepository, UsuarioPokemonRepository
+from .repository import GerenciadorBD
 
 class GestorCartas:
     _instance = None
@@ -19,6 +19,45 @@ class GestorCartas:
         self.__pokemons = []
         self.__api = api
         self.__bd = bd
+
+    def listarTime(self, idJogador: str):
+        try:
+            # 1. Busca a lista de objetos Pokemon (Do domínio) usando o método existente no BD
+            # Isso retorna uma lista de objetos da classe Pokemon
+            lista_pokemons_dominio = self.__bd.getPokemonsDoJogador(idJogador)
+
+            # 2. Transforma os objetos de domínio em dicionários simples para o JSON
+            lista_formatada = []
+            for pokemon in lista_pokemons_dominio:
+                lista_formatada.append({
+                    "pokemon_name": pokemon.get_nome(),
+                    "is_shiny": pokemon.is_shiny()
+                })
+
+            # 3. Monta a resposta no formato exato solicitado
+            return {
+                "status": 200,
+                "message": "Time adquirido com sucesso",
+                "data": {
+                    "player": idJogador,  # Usando o ID conforme solicitado (fallback do nome)
+                    "operation": "LIST_TEAM",
+                    "team": lista_formatada
+                }
+            }
+
+        except ValueError as e:
+            # Caso o usuário não exista (o repo lança ValueError)
+            return {
+                "status": 404,
+                "message": str(e),
+                "data": {}
+            }
+        except Exception as e:
+            return {
+                "status": 500,
+                "message": f"Erro interno ao listar time: {str(e)}",
+                "data": {}
+            }
 
     def gerarPokemonsIniciais(self, idJogador:str):
         sd = StatusDistribuicao()

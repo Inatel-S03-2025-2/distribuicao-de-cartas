@@ -1,5 +1,5 @@
 import requests
-from modules.distribuicao.models import Pokemon
+from .models import Pokemon
 
 class GestorAPI:
     _instance = None
