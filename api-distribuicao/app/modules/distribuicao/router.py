@@ -1,8 +1,8 @@
 from fastapi import APIRouter
 from pydantic import BaseModel
-
-from modules.distribuicao.service import GestorCartas
-from modules.distribuicao.external import GestorAPI
+from .repository import GerenciadorBD
+from .service import GestorCartas
+from .external import GestorAPI
 
 router = APIRouter()
 
@@ -38,7 +38,15 @@ class PokemonSchema(BaseModel):
 
 @router.get("/players/{player_id}/team")
 def time_jogador(player_id: str):
-    return {"message": "Endpoint não implementado"}
+    # Instancia as dependências necessárias
+    api = GestorAPI()
+    bd = GerenciadorBD()  # Necessário instanciar o banco, não passar None
+
+    # Chama o serviço
+    gestor = GestorCartas(api, bd)
+
+    # Retorna o JSON formatado
+    return gestor.listarTime(player_id)
 
 @router.post("/players/{player_id}/distribution", response_model=DistribuicaoResponse)
 def distribuicao_inicial(player_id: str):
