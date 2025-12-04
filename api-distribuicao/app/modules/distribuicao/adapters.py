@@ -1,4 +1,4 @@
-from src.jogador.Jogador import Jogador
+from .models import Jogador
 from .models import Pokemon, PokemonORM, UsuarioORM
 
 def pokemonToOrmAdapter(pokemon: Pokemon) -> PokemonORM:

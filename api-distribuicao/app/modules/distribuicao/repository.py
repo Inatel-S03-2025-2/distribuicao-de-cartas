@@ -1,8 +1,7 @@
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import IntegrityError, NoResultFound
 
-from src.jogador.Jogador import Jogador
-from .models import UsuarioORM, UsuarioPokemonORM, PokemonORM, Pokemon
+from .models import Jogador, UsuarioORM, UsuarioPokemonORM, PokemonORM, Pokemon
 from .adapters import pokemonToOrmAdapter, OrmTopokemonAdapter, UsuarioToOrmAdapter, OrmToUsuarioAdapter
 
 
