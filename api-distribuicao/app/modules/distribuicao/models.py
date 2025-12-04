@@ -2,18 +2,24 @@ from shared.database import Base
 from sqlalchemy import Column, Integer, String, Boolean, ForeignKey
 from sqlalchemy.orm import relationship
 
+
 class Jogador:
-    def __init__(self, id: str, pokemons: list = None, log: str = ""):
+    # Adicionando o parametro 'nome'
+    def __init__(self, id: str, nome: str = "", pokemons: list = None, log: str = ""):
         self.__id = id
+        self.__nome = nome  # Novo atributo
         self.__pokemons = pokemons if pokemons is not None else []
         self.__log = log
 
     def get_id(self):
         return self.__id
-    
+
+    def get_nome(self):  # Novo getter
+        return self.__nome
+
     def get_pokemons(self):
         return self.__pokemons
-    
+
     def get_log(self):
         return self.__log
 

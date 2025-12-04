@@ -38,7 +38,22 @@ class PokemonSchema(BaseModel):
 
 @router.get("/players/{player_id}/team")
 def time_jogador(player_id: str):
-    return {"message": "Endpoint não implementado"}
+    """
+    Lista todos os pokémons de um jogador no formato específico.
+    """
+    # Instancia o Gestor (Singleton)
+    gestor = GestorCartas(GestorAPI(), None)
+
+    # Chama o serviço
+    resultado = gestor.obterTimeJogador(player_id)
+
+    # Define o status code HTTP baseado no status lógico do JSON
+    status_code = resultado.get("status", 200)
+
+    return JSONResponse(
+        status_code=status_code,
+        content=resultado
+    )
 
 @router.post("/players/{player_id}/distribution", response_model=DistribuicaoResponse)
 def distribuicao_inicial(player_id: str):
