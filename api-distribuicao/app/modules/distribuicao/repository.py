@@ -1,9 +1,9 @@
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import IntegrityError, NoResultFound
 
-from shared.database import SessionLocal
-from modules.distribuicao.models import Jogador, UsuarioORM, UsuarioPokemonORM, PokemonORM, Pokemon
-from modules.distribuicao.adapters import pokemonToOrmAdapter, OrmTopokemonAdapter, UsuarioToOrmAdapter, OrmToUsuarioAdapter
+from ...shared.database import SessionLocal
+from .models import Jogador, UsuarioORM, UsuarioPokemonORM, PokemonORM, Pokemon
+from .adapters import pokemonToOrmAdapter, OrmTopokemonAdapter, UsuarioToOrmAdapter, OrmToUsuarioAdapter
 
 class GerenciadorBD:
     
