@@ -29,7 +29,8 @@ def gestor_cartas(mock_api, mock_bd):
 def pokemon_mock():
     pokemon = Mock(spec=Pokemon)
     pokemon.get_nome.return_value = "Pikachu"
-    pokemon.get_id.return_value = 25
+    pokemon.get_numero_pokedex.return_value = 25
+    pokemon.is_shiny.return_value = False
     return pokemon
 
 
