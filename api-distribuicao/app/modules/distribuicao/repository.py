@@ -72,6 +72,11 @@ class GerenciadorBD:
         usuario_pokemon_repo.adicionarPokemonJogador(id_jogador, pokemon)
         return True
 
+    def adicionarPokemon(self, pokemon: Pokemon):
+        pokemon_repo = PokemonRepository(self.session)
+        pokemon_repo.adicionaPokemon(pokemon)
+        return True
+
 class PokemonRepository(IRepository):
     def __init__(self, db: Session):
         self.db = db
