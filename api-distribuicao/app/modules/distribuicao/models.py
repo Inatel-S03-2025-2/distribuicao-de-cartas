@@ -2,21 +2,6 @@ from shared.database import Base
 from sqlalchemy import Column, Integer, String, Boolean, ForeignKey
 from sqlalchemy.orm import relationship
 
-class Jogador:
-    def __init__(self, id: str, pokemons: list = None, log: str = ""):
-        self.__id = id
-        self.__pokemons = pokemons if pokemons is not None else []
-        self.__log = log
-
-    def get_id(self):
-        return self.__id
-    
-    def get_pokemons(self):
-        return self.__pokemons
-    
-    def get_log(self):
-        return self.__log
-
 class Pokemon:
     def __init__(self, numero_pokedex: int = 0, nome: str = 'missingno', shiny: bool = False):
         self.__numero_pokedex = numero_pokedex
@@ -31,6 +16,16 @@ class Pokemon:
 
     def is_shiny(self):
         return self.__shiny
+
+class Jogador:
+    def __init__(self, id: str, pokemons: list):
+        self.__id = id
+        self.__pokemons = pokemons  # lista de objetos Pokemon
+
+    def get_id(self):
+        return self.__id
+    def get_pokemons(self):
+        return self.__pokemons
 
 # classe table pokemon bd
 class PokemonORM(Base):
@@ -48,7 +43,6 @@ class UsuarioORM(Base):
     __tablename__ = 'Usuario'
 
     idUsuario = Column(String(20), primary_key=True, index=True)
-    nomeUsuario = Column(String(50), nullable=False)
 
     # Relação com UsuarioPokemon
     pokemons_colecao = relationship("UsuarioPokemonORM", back_populates="usuario")

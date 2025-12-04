@@ -1,3 +1,4 @@
+from abc import ABC, abstractmethod
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import IntegrityError, NoResultFound
 
@@ -5,8 +6,32 @@ from shared.database import SessionLocal
 from modules.distribuicao.models import Jogador, UsuarioORM, UsuarioPokemonORM, PokemonORM, Pokemon
 from modules.distribuicao.adapters import pokemonToOrmAdapter, OrmTopokemonAdapter, UsuarioToOrmAdapter, OrmToUsuarioAdapter
 
+class IRepository(ABC):
+    """Interface base para repositórios"""
+
+    @abstractmethod
+    def create(self, entity):
+        """Adiciona uma entidade"""
+        pass
+
+    @abstractmethod
+    def read(self, id):
+        """Busca uma entidade por ID"""
+        pass
+
+    @abstractmethod
+    def delete(self, entity):
+        """Remove uma entidade"""
+        pass
+
+    @abstractmethod
+    def exists(self, id) -> bool:
+        """Verifica se uma entidade existe"""
+        pass
+
+
 class GerenciadorBD:
-    
+
     def __init__(self):
         self.conexaoBD()
 
@@ -16,16 +41,16 @@ class GerenciadorBD:
 
     def createJogador(self, jogador: Jogador):
         usuario_repo = UsuarioRepository(self.session)
-        usuario_repo.adicionaUsuario(jogador)
+        usuario_repo.create(jogador)
         return True
 
     def readJogador(self, id_jogador: str) -> Jogador:
         usuario_repo = UsuarioRepository(self.session)
-        return usuario_repo.buscaPorId(id_jogador)
+        return usuario_repo.read(id_jogador)
 
     def deleteJogador(self, jogador: Jogador):
         usuario_repo = UsuarioRepository(self.session)
-        usuario_repo.removeUsuario(jogador)
+        usuario_repo.delete(jogador)
         return True
     
     def getPokemonsDoJogador(self, id_jogador: str) -> list[Pokemon]:
@@ -52,13 +77,13 @@ class GerenciadorBD:
         pokemon_repo.adicionaPokemon(pokemon)
         return True
 
-class PokemonRepository:
+class PokemonRepository(IRepository):
     def __init__(self, db: Session):
         self.db = db
 
-    def adicionaPokemon(self, pokemon: Pokemon):
+    def create(self, pokemon: Pokemon):
         """Adiciona um pokémon. Erro se já existir."""
-        if self.existe(pokemon.get_numero_pokedex()):
+        if self.exists(pokemon.get_numero_pokedex()):
             raise ValueError(
                 f"Pokémon com ID {pokemon.get_numero_pokedex()} já existe"
             )
@@ -72,7 +97,7 @@ class PokemonRepository:
             self.db.rollback()
             raise ValueError(f"Erro ao adicionar pokémon: {e}")
 
-    def removePokemon(self, pokemon: Pokemon):
+    def delete(self, pokemon: Pokemon):
         """Remove um pokémon. Erro se não existir."""
         pokemon_orm = self.db.query(PokemonORM).filter(
             PokemonORM.idPokemon == pokemon.get_numero_pokedex()
@@ -90,7 +115,7 @@ class PokemonRepository:
             self.db.rollback()
             raise ValueError(f"Erro ao remover pokémon: {e}")
 
-    def buscaPokeId(self, id_pokemon: int) -> Pokemon:
+    def read(self, id_pokemon: int) -> Pokemon:
         """Busca um Pokémon pelo ID da tabela e retorna entidade de domínio"""
         pokemon_orm = self.db.query(PokemonORM).filter(
             PokemonORM.idPokemon == id_pokemon
@@ -106,7 +131,7 @@ class PokemonRepository:
         pokemons_orm = self.db.query(PokemonORM).all()
         return [OrmTopokemonAdapter(p) for p in pokemons_orm]
 
-    def existe(self, numero_pokedex: int) -> bool:
+    def exists(self, numero_pokedex: int) -> bool:
         """Verifica se um pokémon existe"""
         return (
             self.db.query(PokemonORM)
@@ -115,13 +140,13 @@ class PokemonRepository:
             is not None
         )
 
-class UsuarioRepository:
+class UsuarioRepository(IRepository):
     def __init__(self, db: Session):
         self.db = db
 
-    def adicionaUsuario(self, usuario: Jogador):
+    def create(self, usuario: Jogador):
         """Adiciona um jogador. Erro se já existir."""
-        if self.existe(usuario.get_id()):
+        if self.exists(usuario.get_id()):
             raise ValueError(
                 f"Usuário com ID {usuario.get_id()} já existe"
             )
@@ -136,7 +161,7 @@ class UsuarioRepository:
             self.db.rollback()
             raise ValueError(f"Erro ao adicionar usuário: {e}")
 
-    def removeUsuario(self, usuario: Jogador):
+    def delete(self, usuario: Jogador):
         """Remove um jogador."""
         usuario_orm = (
             self.db.query(UsuarioORM)
@@ -156,7 +181,7 @@ class UsuarioRepository:
             self.db.rollback()
             raise ValueError(f"Erro ao remover usuário: {e}")
 
-    def buscaPorId(self, id_usuario: str) -> Jogador:
+    def read(self, id_usuario: str) -> Jogador:
         """Busca um usuário por ID."""
         usuario_orm = (
             self.db.query(UsuarioORM)
@@ -171,7 +196,7 @@ class UsuarioRepository:
 
         return OrmToUsuarioAdapter(usuario_orm)
 
-    def existe(self, id_usuario: str) -> bool:
+    def exists(self, id_usuario: str) -> bool:
         """Verifica se o usuário existe."""
         return (
             self.db.query(UsuarioORM)
@@ -188,13 +213,11 @@ class UsuarioPokemonRepository:
 
     def adicionarPokemonJogador(self, id_usuario: str, pokemon: Pokemon):
         """Adiciona um pokémon ao jogador."""
-        if not self.usuario_repo.existe(id_usuario):
+        if not self.usuario_repo.exists(id_usuario):
             raise ValueError(f"Usuário com ID {id_usuario} não encontrado")
 
         # Garante que o Pokémon existe
-        pokemon_entidade = self.pokemon_repo.buscaPokeId(
-            pokemon.get_numero_pokedex()
-        )
+        self.pokemon_repo.read(pokemon.get_numero_pokedex())
 
         nova_carta = UsuarioPokemonORM(
             idUsuario=id_usuario,
@@ -229,7 +252,7 @@ class UsuarioPokemonRepository:
 
     def listarPokemonsDoUsuario(self, id_usuario: str) -> list[Pokemon]:
         """Lista todos os pokémons de um usuário."""
-        if not self.usuario_repo.existe(id_usuario):
+        if not self.usuario_repo.exists(id_usuario):
             raise ValueError(f"Usuário com ID {id_usuario} não encontrado")
 
         # join para buscar os poke

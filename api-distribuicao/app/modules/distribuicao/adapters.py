@@ -1,5 +1,4 @@
-from modules.distribuicao.models import Jogador
-from modules.distribuicao.models import Pokemon, PokemonORM, UsuarioORM
+from modules.distribuicao.models import Pokemon, PokemonORM, UsuarioORM, Jogador
 
 def pokemonToOrmAdapter(pokemon: Pokemon) -> PokemonORM:
     """Converte um objeto de Pokemon padrão para um objeto ORM."""
