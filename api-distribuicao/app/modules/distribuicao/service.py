@@ -60,7 +60,7 @@ class GestorCartas:
                 "status": 200,
                 "message": "Time adquirido com sucesso",
                 "data": {
-                    "player": jogador.get_nome(),  # Pega o nome do objeto Jogador
+                    "player": jogador.get_id(),  # Retorna ID do jogador
                     "operation": "LIST_TEAM",
                     "team": team_json
                 }
