@@ -1,10 +1,10 @@
 import json
 import random
 
-from .external import GestorAPI
-from .models import Pokemon, UsuarioPokemonORM
-from .schemas import StatusDistribuicao, Status
-from .repository import PokemonRepository, UsuarioRepository, UsuarioPokemonRepository
+from modules.distribuicao.external import GestorAPI
+from modules.distribuicao.models import Pokemon
+from modules.distribuicao.schemas import StatusDistribuicao, Status
+from modules.distribuicao.repository import PokemonRepository, UsuarioRepository, UsuarioPokemonRepository
 
 class GestorCartas:
     _instance = None
