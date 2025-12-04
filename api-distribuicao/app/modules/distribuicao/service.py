@@ -2,7 +2,7 @@ import json
 import random
 
 from .external import GestorAPI
-from .models import Pokemon, Jogador
+from .models import Pokemon, UsuarioORM
 from .schemas import StatusDistribuicao, Status
 from .repository import PokemonRepository, UsuarioRepository, UsuarioPokemonRepository
 from ...shared.database import SessionLocal
@@ -22,9 +22,8 @@ class GestorCartas:
 
     def obterTimeJogador(self, idJogador: str) -> dict:
         """
-        Busca o jogador e seus pokémons e retorna o JSON formatado conforme especificação.
+        Busca o jogador e seus pokémons e retorna o JSON formatado.
         """
-        # Cria uma nova sessão de banco de dados para esta operação
         db = SessionLocal()
 
         try:
@@ -33,18 +32,18 @@ class GestorCartas:
             poke_repo = PokemonRepository(db)
             user_poke_repo = UsuarioPokemonRepository(db, poke_repo, user_repo)
 
-            # 1. Verifica se o usuário existe e pega seus dados (nome)
-            try:
-                jogador: Jogador = user_repo.buscaPorId(idJogador)
-            except ValueError:
-                # Usuário não encontrado
+            # 1. Verifica se o usuário existe no banco e pega o NOME para o JSON
+            # (Já que a classe Jogador não tem mais nome, pegamos direto do ORM)
+            usuario_db = db.query(UsuarioORM).filter(UsuarioORM.idUsuario == idJogador).first()
+
+            if not usuario_db:
                 return {
                     "status": 404,
                     "message": f"Jogador com ID {idJogador} não encontrado.",
                     "data": None
                 }
 
-            # 2. Busca a lista de Pokémons (Objetos de Domínio)
+            # 2. Busca a lista de Pokémons
             lista_pokemons = user_poke_repo.listarPokemonsDoUsuario(idJogador)
 
             # 3. Formata a lista para o padrão do JSON solicitado
@@ -60,7 +59,7 @@ class GestorCartas:
                 "status": 200,
                 "message": "Time adquirido com sucesso",
                 "data": {
-                    "player": jogador.get_id(),  # Retorna ID do jogador
+                    "player": usuario_db.nomeUsuario,  # Pega o nome direto do banco
                     "operation": "LIST_TEAM",
                     "team": team_json
                 }
@@ -75,7 +74,6 @@ class GestorCartas:
                 "data": None
             }
         finally:
-            # Fecha a conexão com o banco
             db.close()
 
 
