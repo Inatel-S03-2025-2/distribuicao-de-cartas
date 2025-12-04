@@ -1,9 +1,52 @@
+from annotated_types import T
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import IntegrityError, NoResultFound
 
-from .models import Jogador, UsuarioORM, UsuarioPokemonORM, PokemonORM, Pokemon
-from .adapters import pokemonToOrmAdapter, OrmTopokemonAdapter, UsuarioToOrmAdapter, OrmToUsuarioAdapter
+from shared.database import SessionLocal
+from modules.distribuicao.models import Jogador, UsuarioORM, UsuarioPokemonORM, PokemonORM, Pokemon
+from modules.distribuicao.adapters import pokemonToOrmAdapter, OrmTopokemonAdapter, UsuarioToOrmAdapter, OrmToUsuarioAdapter
 
+class GerenciadorBD:
+    
+    def __init__(self):
+        self.conexaoBD()
+
+    def conexaoBD(self):
+        self.session = SessionLocal()
+        self.session.rollback()
+
+    def createJogador(self, jogador: Jogador):
+        usuario_repo = UsuarioRepository(self.session)
+        usuario_repo.adicionaUsuario(jogador)
+        return True
+
+    def readJogador(self, id_jogador: str) -> Jogador:
+        usuario_repo = UsuarioRepository(self.session)
+        return usuario_repo.buscaPorId(id_jogador)
+
+    def deleteJogador(self, jogador: Jogador):
+        usuario_repo = UsuarioRepository(self.session)
+        usuario_repo.removeUsuario(jogador)
+        return True
+    
+    def getPokemonsDoJogador(self, id_jogador: str) -> list[Pokemon]:
+        usuario_repo = UsuarioRepository(self.session)
+        pokemon_repo = PokemonRepository(self.session)
+        usuario_pokemon_repo = UsuarioPokemonRepository(self.session, pokemon_repo, usuario_repo)
+        return usuario_pokemon_repo.listarPokemonsDoUsuario(id_jogador)
+
+    def removerPokemonDoJogador(self, id_jogador: str, id_pokemon: int) -> bool:
+        usuario_repo = UsuarioRepository(self.session)
+        pokemon_repo = PokemonRepository(self.session)
+        usuario_pokemon_repo = UsuarioPokemonRepository(self.session, pokemon_repo, usuario_repo)
+        return usuario_pokemon_repo.removerPokemonJogador(id_jogador, id_pokemon)
+    
+    def adicionarPokemonAoJogador(self, id_jogador: str, pokemon: Pokemon):
+        usuario_repo = UsuarioRepository(self.session)
+        pokemon_repo = PokemonRepository(self.session)
+        usuario_pokemon_repo = UsuarioPokemonRepository(self.session, pokemon_repo, usuario_repo)
+        usuario_pokemon_repo.adicionarPokemonJogador(id_jogador, pokemon)
+        return True
 
 class PokemonRepository:
     def __init__(self, db: Session):
