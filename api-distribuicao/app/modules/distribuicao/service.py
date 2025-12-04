@@ -19,8 +19,6 @@ class GestorCartas:
         self.__api = api
         self.__bd = bd
 
-
-
     def gerarPokemonsIniciais(self, idJogador:str):
         sd = StatusDistribuicao()
         pokemon = Pokemon()

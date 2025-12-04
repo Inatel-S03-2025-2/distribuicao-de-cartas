@@ -1,4 +1,3 @@
-from annotated_types import T
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import IntegrityError, NoResultFound
 
