@@ -4,7 +4,7 @@ from sqlalchemy.exc import IntegrityError, NoResultFound
 
 from shared.database import SessionLocal
 from modules.distribuicao.models import Jogador, UsuarioORM, UsuarioPokemonORM, PokemonORM, Pokemon
-from modules.distribuicao.adapters import pokemonToOrmAdapter, OrmTopokemonAdapter, UsuarioToOrmAdapter, gitOrmToUsuarioAdapter
+from modules.distribuicao.adapters import pokemonToOrmAdapter, OrmTopokemonAdapter, UsuarioToOrmAdapter, OrmToUsuarioAdapter
 
 class IRepository(ABC):
     """Interface base para repositórios"""
