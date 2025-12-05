@@ -46,7 +46,6 @@ Responsável por escolher cinco Pokémons aleatórios, disponibilizados pela [**
   "status": 201,
   "message": "Operação realizada com sucesso",
   "data": {
-    "player": "Ash Ketchum",
     "operation": "ADDED",
     "pokemon_name": "Charizard",
     "is_shiny": true
@@ -60,7 +59,6 @@ Responsável por escolher cinco Pokémons aleatórios, disponibilizados pela [**
   "status": 200,
   "message": "Time adiquirido com sucesso",
   "data": {
-    "player": "Ash Ketchum",
     "operation": "LIST_TEAM",
     "team": [
       {
@@ -94,7 +92,6 @@ Responsável por escolher cinco Pokémons aleatórios, disponibilizados pela [**
   "status": 200,
   "message": "Jogador e seu time foram apagados do registro",
   "data": {
-    "player": "Ash Ketchum",
     "operation": "PLAYER_REMOVED",
   }
 }
@@ -106,7 +103,6 @@ Responsável por escolher cinco Pokémons aleatórios, disponibilizados pela [**
   "status": 201,
   "message": "Jogador cadastrado e time sorteado com sucesso",
   "data": {
-    "player": "Gary Oak",
     "operation": "PLAYER_CREATED",
     "draft_status": "SUCCESS",
     "draft_count": 5
@@ -125,10 +121,31 @@ Para garantir a manutenibilidade e testabilidade, optamos por uma arquitetura ba
 ### 👷‍♂️ SOA
 Adotamos **SOA** para estruturar o sistema de Distribuição de Cartas como um serviço autônomo. A classe GestorCartas utiliza a lógica de negócio, segregando responsabilidades críticas, o consumo de dados externos é isolado no GerenciadorAPI e a persistência no GerenciadorBD. Essa divisão garante que alterações na API externa ou no banco de dados não impactem o núcleo do sistema.
 
-### !!*Padrão de Projeto*!!
-```
-‼️Work in progress‼️
-```
+### 🏗️ Padrões de Projeto (Design Patterns)
+Este projeto utiliza princípios de Arquitetura de Software para garantir um código modular, testável e de fácil manutenção. Abaixo estão os principais padrões utilizados:
+
+#### Repository Pattern
+O padrão Repository foi implementado para criar uma camada de abstração entre a lógica de negócios e a camada de acesso a dados (Banco de Dados).
+
+Como foi usado: Classes como PokemonRepository e UsuarioRepository encapsulam as consultas complexas do SQLAlchemy.
+
+Benefício ao Nosso Código: Isso permite que o restante da aplicação (como os Services e Controllers) não precise saber detalhes de como os dados são salvos ou buscados (SQL), facilitando a troca de banco de dados e a criação de testes unitários com mocks.
+
+#### Adapter Pattern
+O padrão Adapter foi utilizado para integrar a aplicação com serviços externos de forma desacoplada, entre as Classes internas do nosso código, as de conexões com o Banco de Dados e a PokeAPI.
+
+Como foi usado: A classe GestorAPI atua como um adaptador para a PokeAPI externa. Ela adapta a resposta JSON complexa e "crua" da API externa para os objetos de domínio da nossa aplicação **(Pokemon)**, e também há uma tradução interna de tipos de Objeto (**ORM (Object Realational Mapper)** <-> **Dominio (Nossas Classes)**).
+
+Benefício ao Nosso Código: Se a API externa mudar suas rotas ou formato de resposta, precisamos alterar apenas a classe adaptadora, mantendo a regra de negócio da aplicação intacta.
+
+ #### Singleton Pattern
+O padrão Singleton foi aplicado para garantir o gerenciamento eficiente de recursos compartilhados.
+
+Como foi usado: A classe GestorAPI foi implementada como um Singleton. Isso garante que exista apenas uma única instância dessa classe durante todo o ciclo de vida da aplicação.
+
+Benefício ao Nosso Código: Evita a criação desnecessária de múltiplas instâncias de conexão e configurações de API, economizando memória e centralizando o ponto de acesso aos dados externos.
+
+
 ---
 ## 🧱 Aplicação do Princípio SOLIDD
 ### Single Responsability
