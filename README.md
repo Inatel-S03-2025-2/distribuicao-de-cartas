@@ -131,6 +131,10 @@ Como foi usado: Classes como **PokemonRepository** e **UsuarioRepository** encap
 
 Benefício ao Nosso Código: Isso permite que o restante da aplicação (como os Services e Controllers) não precise saber detalhes de como os dados são salvos ou buscados (SQL), facilitando a troca de banco de dados e a criação de testes unitários com mocks.
 
+**CLASSE EXEMPLO:**
+
+![Imagem de Exemplo Repository Pattern](documentacao\imagens\padroes\exemplo_repository.png)
+
 #### Adapter Pattern
 O padrão Adapter foi utilizado para integrar a aplicação com serviços externos de forma desacoplada, entre as Classes internas do nosso código, as de conexões com o Banco de Dados e a **PokeAPI**.
 
@@ -138,12 +142,20 @@ Como foi usado: A classe **GestorAPI** atua como um adaptador para a **PokeAPI**
 
 Benefício ao Nosso Código: Se a API externa mudar suas rotas ou formato de resposta, precisamos alterar apenas a classe adaptadora, mantendo a regra de negócio da aplicação intacta.
 
- #### Singleton Pattern
+**CLASSE EXEMPLO:**
+
+![Imagem de Exemplo Adapter Pattern](documentacao\imagens\padroes\exemplo_adapter.png)
+
+#### Singleton Pattern
 O padrão Singleton foi aplicado para garantir o gerenciamento eficiente de recursos compartilhados.
 
 Como foi usado: As classes **GestorAPI** e **GestorCartas** foram implementadas como Singleton. Pois isso garante que exista apenas uma única instância de cada uma dessas classes durante todo o ciclo de vida da aplicação.
 
 Benefício ao Nosso Código: Evita a criação desnecessária de múltiplas instâncias de conexão e configurações de API, economizando memória e centralizando o ponto de acesso aos dados externos.
+
+**CLASSE EXEMPLO:**
+
+![Imagem de Exemplo Singleton Pattern](documentacao\imagens\padroes\exemplo_singleton.png)
 
 ---
 ## 🧱 Aplicação do Princípio SOLIDD
