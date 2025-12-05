@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from modules.distribuicao.router import router as distribuicao_router
+from app.modules.distribuicao.router import router as distribuicao_router
 
 app = FastAPI()
 
