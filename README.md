@@ -133,7 +133,7 @@ Benefício ao Nosso Código: Isso permite que o restante da aplicação (como os
 
 **CLASSE EXEMPLO:**
 
-![Imagem de Exemplo Repository Pattern](documentacao\imagens\padroes\exemplo_repository.png)
+![Imagem de Exemplo Repository Pattern](documentacao/imagens/padroes/exemplo_repository.png)
 
 #### Adapter Pattern
 O padrão Adapter foi utilizado para integrar a aplicação com serviços externos de forma desacoplada, entre as Classes internas do nosso código, as de conexões com o Banco de Dados e a **PokeAPI**.
@@ -144,7 +144,7 @@ Benefício ao Nosso Código: Se a API externa mudar suas rotas ou formato de res
 
 **CLASSE EXEMPLO:**
 
-![Imagem de Exemplo Adapter Pattern](documentacao\imagens\padroes\exemplo_adapter.png)
+![Imagem de Exemplo Adapter Pattern](documentacao/imagens/padroes/exemplo_adapter.png)
 
 #### Singleton Pattern
 O padrão Singleton foi aplicado para garantir o gerenciamento eficiente de recursos compartilhados.
@@ -155,7 +155,7 @@ Benefício ao Nosso Código: Evita a criação desnecessária de múltiplas inst
 
 **CLASSE EXEMPLO:**
 
-![Imagem de Exemplo Singleton Pattern](documentacao\imagens\padroes\exemplo_singleton.png)
+![Imagem de Exemplo Singleton Pattern](documentacao/imagens/padroes/exemplo_singleton.png)
 
 ---
 ## 🧱 Aplicação do Princípio SOLIDD
