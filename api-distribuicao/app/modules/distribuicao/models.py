@@ -4,18 +4,18 @@ from sqlalchemy.orm import relationship
 
 class Pokemon:
     def __init__(self, numero_pokedex: int = 0, nome: str = 'missingno', shiny: bool = False):
-        self.__numero_pokedex = numero_pokedex
-        self.__nome = nome
-        self.__shiny = shiny
+        self.numero_pokedex = numero_pokedex
+        self.nome = nome
+        self.shiny = shiny
 
     def get_numero_pokedex(self):
-        return self.__numero_pokedex
+        return self.numero_pokedex
 
     def get_nome(self):
-        return self.__nome
+        return self.nome
 
     def is_shiny(self):
-        return self.__shiny
+        return self.shiny
 
 class Jogador:
     def __init__(self, id: str, pokemons: list):

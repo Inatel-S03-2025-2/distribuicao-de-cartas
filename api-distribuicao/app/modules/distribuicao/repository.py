@@ -74,7 +74,7 @@ class GerenciadorBD:
 
     def adicionarPokemon(self, pokemon: Pokemon):
         pokemon_repo = PokemonRepository(self.session)
-        pokemon_repo.adicionaPokemon(pokemon)
+        pokemon_repo.create(pokemon)
         return True
 
 class PokemonRepository(IRepository):
