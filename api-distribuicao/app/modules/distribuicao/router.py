@@ -1,8 +1,12 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends, HTTPException
+from fastapi.responses import JSONResponse
 from pydantic import BaseModel
+from sqlalchemy.orm import Session
 
-from modules.distribuicao.service import GestorCartas
-from modules.distribuicao.external import GestorAPI
+from .service import GestorCartas
+from .external import GestorAPI
+from .repository import GerenciadorBD
+from ...shared.database import get_db
 
 router = APIRouter()
 
@@ -41,24 +45,38 @@ def time_jogador(player_id: str):
     return {"message": "Endpoint não implementado"}
 
 @router.post("/players/{player_id}/distribution", response_model=DistribuicaoResponse)
-def distribuicao_inicial(player_id: str):
-    resultado = GestorCartas(GestorAPI(), None).gerarPokemonsIniciais(player_id)
+def distribuicao_inicial(player_id: str, db: Session = Depends(get_db)):
+    gestor_bd = GerenciadorBD(db)
+    gestor = GestorCartas(GestorAPI(), gestor_bd)
+    resultado = gestor.gerarPokemonsIniciais(player_id)
     return resultado
 
 @router.delete("/players/{player_id}/team")
-def remove_pokemon_jogador(player_id: str, dados_pokemon: PokemonSchema):
+def remove_pokemon_jogador(player_id: str, dados_pokemon: PokemonSchema, db: Session = Depends(get_db)):
     id_pokemon = dados_pokemon.pokemon_id
     is_shiny = dados_pokemon.pokemon_shiny
     pokemon_removido = GestorAPI().getPokemon(numero_pokedex=id_pokemon, shiny=is_shiny)
-    resultado = GestorCartas(GestorAPI(), None).removerPokemon(player_id, pokemon_removido)
+    
+    if pokemon_removido is None:
+        raise HTTPException(status_code=404, detail=f"Pokémon {id_pokemon} não encontrado na PokéAPI")
+    
+    gestor_bd = GerenciadorBD(db)
+    gestor = GestorCartas(GestorAPI(), gestor_bd)
+    resultado = gestor.removerPokemon(player_id, pokemon_removido)
     return resultado
 
 @router.post("/players/{player_id}/team")
-def adiciona_pokemon_jogador(player_id: str, dados_pokemon: PokemonSchema):
+def adiciona_pokemon_jogador(player_id: str, dados_pokemon: PokemonSchema, db: Session = Depends(get_db)):
     id_pokemon = dados_pokemon.pokemon_id
     is_shiny = dados_pokemon.pokemon_shiny
     pokemon_adicionado = GestorAPI().getPokemon(numero_pokedex=id_pokemon, shiny=is_shiny)
-    resultado = GestorCartas(GestorAPI(), None).adicionarPokemon(player_id, pokemon_adicionado)
+    
+    if pokemon_adicionado is None:
+        raise HTTPException(status_code=404, detail=f"Pokémon {id_pokemon} não encontrado na PokéAPI")
+    
+    gestor_bd = GerenciadorBD(db)
+    gestor = GestorCartas(GestorAPI(), gestor_bd)
+    resultado = gestor.adicionarPokemon(player_id, pokemon_adicionado)
     return resultado
 
 #TODO:

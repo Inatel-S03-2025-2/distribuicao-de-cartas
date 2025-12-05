@@ -2,9 +2,9 @@ from abc import ABC, abstractmethod
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import IntegrityError, NoResultFound
 
-from shared.database import SessionLocal
-from modules.distribuicao.models import Jogador, UsuarioORM, UsuarioPokemonORM, PokemonORM, Pokemon
-from modules.distribuicao.adapters import pokemonToOrmAdapter, OrmTopokemonAdapter, UsuarioToOrmAdapter, OrmToUsuarioAdapter
+from ...shared.database import SessionLocal
+from .models import Jogador, UsuarioORM, UsuarioPokemonORM, PokemonORM, Pokemon
+from .adapters import pokemonToOrmAdapter, OrmTopokemonAdapter, UsuarioToOrmAdapter, OrmToUsuarioAdapter
 
 class IRepository(ABC):
     """Interface base para repositórios"""
@@ -32,12 +32,8 @@ class IRepository(ABC):
 
 class GerenciadorBD:
 
-    def __init__(self):
-        self.conexaoBD()
-
-    def conexaoBD(self):
-        self.session = SessionLocal()
-        self.session.rollback()
+    def __init__(self, db: Session):
+        self.session = db
 
     def createJogador(self, jogador: Jogador):
         usuario_repo = UsuarioRepository(self.session)

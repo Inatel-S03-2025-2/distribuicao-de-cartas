@@ -1,10 +1,13 @@
 import os
+import logging
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm import declarative_base
 from dotenv import load_dotenv
 
 load_dotenv()
+
+logger = logging.getLogger(__name__)
 
 DB_USER = os.environ.get("DB_USER", "fallback_user")
 DB_PASSWORD = os.environ.get("DB_PASSWORD", "fallback_password")
@@ -18,8 +21,16 @@ engine = create_engine(DB_URL)
 Base = declarative_base()
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
+def get_db():
+    """Dependency Injection para FastAPI - gerencia sessão automaticamente"""
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
+
 try:
     engine.connect()
-    print("Conexão com o banco concluída com sucesso.")
+    logger.info("Conexão com o banco concluída com sucesso.")
 except Exception as e:
-    print(f"Erro ao conectar ao banco de dados: {e}")
+    logger.error(f"Erro ao conectar ao banco de dados: {e}")
