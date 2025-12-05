@@ -3,6 +3,7 @@ from pydantic import BaseModel
 
 from modules.distribuicao.service import GestorCartas
 from modules.distribuicao.external import GestorAPI
+from modules.distribuicao.repository import GerenciadorBD
 
 router = APIRouter()
 
@@ -38,11 +39,12 @@ class PokemonSchema(BaseModel):
 
 @router.get("/players/{player_id}/team")
 def time_jogador(player_id: str):
-    return {"message": "Endpoint não implementado"}
+    status = GestorCartas(GestorAPI(), GerenciadorBD()).listarTime(player_id)
+    return status
 
 @router.post("/players/{player_id}/distribution", response_model=DistribuicaoResponse)
 def distribuicao_inicial(player_id: str):
-    resultado = GestorCartas(GestorAPI(), None).gerarPokemonsIniciais(player_id)
+    resultado = GestorCartas(GestorAPI(), GerenciadorBD()).gerarPokemonsIniciais(player_id)
     return resultado
 
 @router.delete("/players/{player_id}/team")
@@ -50,7 +52,7 @@ def remove_pokemon_jogador(player_id: str, dados_pokemon: PokemonSchema):
     id_pokemon = dados_pokemon.pokemon_id
     is_shiny = dados_pokemon.pokemon_shiny
     pokemon_removido = GestorAPI().getPokemon(numero_pokedex=id_pokemon, shiny=is_shiny)
-    resultado = GestorCartas(GestorAPI(), None).removerPokemon(player_id, pokemon_removido)
+    resultado = GestorCartas(GestorAPI(), GerenciadorBD()).removerPokemon(player_id, pokemon_removido)
     return resultado
 
 @router.post("/players/{player_id}/team")
@@ -58,7 +60,7 @@ def adiciona_pokemon_jogador(player_id: str, dados_pokemon: PokemonSchema):
     id_pokemon = dados_pokemon.pokemon_id
     is_shiny = dados_pokemon.pokemon_shiny
     pokemon_adicionado = GestorAPI().getPokemon(numero_pokedex=id_pokemon, shiny=is_shiny)
-    resultado = GestorCartas(GestorAPI(), None).adicionarPokemon(player_id, pokemon_adicionado)
+    resultado = GestorCartas(GestorAPI(), GerenciadorBD()).adicionarPokemon(player_id, pokemon_adicionado)
     return resultado
 
 #TODO:
