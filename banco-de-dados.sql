@@ -11,15 +11,14 @@ CREATE TABLE IF NOT EXISTS Pokemon (
 
 -- Tabela de Usuários
 CREATE TABLE IF NOT EXISTS Usuario (
-    idUsuario INT AUTO_INCREMENT PRIMARY KEY,
-    nomeUsuario VARCHAR(50) NOT NULL
+    idUsuario INT AUTO_INCREMENT PRIMARY KEY
 );
 
 -- Relação entre Usuario e Pokemon
 CREATE TABLE IF NOT EXISTS UsuarioPokemon (
     idUsuario INT NOT NULL,
     idPokemon INT NOT NULL,
-    
+
     PRIMARY KEY (idUsuario, idPokemon),
     FOREIGN KEY (idUsuario) REFERENCES Usuario(idUsuario)
         ON DELETE CASCADE ON UPDATE CASCADE,

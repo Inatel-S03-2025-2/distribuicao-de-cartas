@@ -1,5 +1,4 @@
-from src.jogador.Jogador import Jogador
-from .models import Pokemon, PokemonORM, UsuarioORM
+from modules.distribuicao.models import Pokemon, PokemonORM, UsuarioORM, Jogador
 
 def pokemonToOrmAdapter(pokemon: Pokemon) -> PokemonORM:
     """Converte um objeto de Pokemon padrão para um objeto ORM."""
@@ -21,4 +20,12 @@ def UsuarioToOrmAdapter(usuario: Jogador) -> UsuarioORM:
     """Converte um objeto Jogador padrão em um Jogador ORM"""
     return UsuarioORM(
         idUsuario=usuario.get_id()
+    )
+
+
+def OrmToUsuarioAdapter(usuario_orm: UsuarioORM) -> Jogador:
+    """"""
+    return Jogador(
+        id=usuario_orm.idUsuario,
+        pokemons=usuario_orm.pokemons_colecao
     )
