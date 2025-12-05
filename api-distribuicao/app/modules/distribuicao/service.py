@@ -9,16 +9,19 @@ from .repository import GerenciadorBD
 
 class GestorCartas:
     _instance = None
+    _initialized = False
+    
     def __new__(cls, *args, **kwargs):
         if cls._instance is None:
             cls._instance = super().__new__(cls)
-            cls._instance.__init_once(*args, **kwargs)
         return cls._instance
 
-    def __init_once(self, api:GestorAPI, bd:GerenciadorBD):
-        self.__pokemons = []
-        self.__api = api
-        self.__bd = bd
+    def __init__(self, api: GestorAPI, bd: GerenciadorBD):
+        if not GestorCartas._initialized:
+            self.__pokemons = []
+            self.__api = api
+            self.__bd = bd
+            GestorCartas._initialized = True
 
     def gerarPokemonsIniciais(self, idJogador:str):
         sd = StatusDistribuicao()
@@ -36,51 +39,47 @@ class GestorCartas:
                         pokemons_id.append(pokemon_id)
                     else:
                         pass
-            #------------------------------------------------------------------------
-            try:
-                self.__bd.createJogador(idJogador)
-            except ValueError as e:
-                print(f"Erro: {e}")
-            #------------------------------------------------------------------------
-            try:
-                for p in pokemons:
-                    self.__bd.adicionarPokemon(p)
-            except ValueError as e:
-                print(f"Erro: {e}")
-            #------------------------------------------------------------------------
-            try:
-                for p in pokemons:
-                    self.__bd.adicionarPokemonAoJogador(idJogador, p)
-            except ValueError as e:
-                print(f"Erro: {e}")
-            #------------------------------------------------------------------------
+            
+            # Cria jogador
+            self.__bd.createJogador(idJogador)
+            
+            # Adiciona pokémons
+            for p in pokemons:
+                self.__bd.adicionarPokemon(p)
+            
+            # Associa pokémons ao jogador
+            for p in pokemons:
+                self.__bd.adicionarPokemonAoJogador(idJogador, p)
+            
             sd.set_status(Status.SUCESSO)
             sd.set_mensagem("Os 5 pokémons iniciais foram gerados com sucesso.")
             sd.set_codigo("200")
             status = sd.get_resumo()
             status["pokemons"] = pokemons
             return status
-        except AttributeError as e:
+            
+        except ValueError as e:
+            sd.set_status(Status.ERRO)
+            sd.set_mensagem(f"Erro de validação: {e}")
+            sd.set_codigo("400")
+            return sd.get_resumo()
+            
+        except Exception as e:
             sd.set_status(Status.ERRO)
             sd.set_mensagem(f"Erro ao gerar pokémons iniciais: {e}")
             sd.set_codigo("500")
             return sd.get_resumo()
     
-    def adicionarPokemon(self, idJogador: int, pokemon: Pokemon) -> dict:
+    def adicionarPokemon(self, idJogador: str, pokemon: Pokemon) -> dict:
         sd = StatusDistribuicao()
         
         try:
-            #------------------------------------------------------------------------
-            try:
-                self.__bd.adicionarPokemon(pokemon)
-            except ValueError as e:
-                print(f"Erro: {e}")
-            #------------------------------------------------------------------------
-            try:
-                self.__bd.adicionarPokemonAoJogador(idJogador, pokemon)
-            except ValueError as e:
-                print(f"Erro: {e}")
-            #------------------------------------------------------------------------
+            # Adiciona pokémon ao banco
+            self.__bd.adicionarPokemon(pokemon)
+            
+            # Associa ao jogador
+            self.__bd.adicionarPokemonAoJogador(idJogador, pokemon)
+            
             sd.set_status(Status.SUCESSO)
             sd.set_mensagem(f"{pokemon.get_nome()} foi adicionado à coleção do jogador {idJogador}.")
             sd.set_codigo("200")
@@ -101,13 +100,23 @@ class GestorCartas:
             return sd.get_resumo()
 
 
-    def removerPokemon(self, idJogador: int, pokemon: Pokemon) :
+    def removerPokemon(self, idJogador: str, pokemon: Pokemon):
         sd = StatusDistribuicao()
         try:
-            self.__bd.removerPokemonDoJogador(idJogador, pokemon)
+            self.__bd.removerPokemonDoJogador(idJogador, pokemon.get_numero_pokedex())
+            sd.set_status(Status.SUCESSO)
+            sd.set_mensagem(f"{pokemon.get_nome()} foi removido da coleção do jogador {idJogador}.")
+            sd.set_codigo("200")
+            return sd.get_resumo()
+            
         except ValueError as e:
-            print(f"Erro: {e}")
-        sd.set_status(Status.SUCESSO)
-        sd.set_mensagem(f"{pokemon.get_nome()} foi removido da coleção do jogador {idJogador}.")
-        sd.set_codigo("200")
-        return sd.get_resumo()
+            sd.set_status(Status.ERRO)
+            sd.set_mensagem(str(e))
+            sd.set_codigo("400")
+            return sd.get_resumo()
+            
+        except Exception as e:
+            sd.set_status(Status.ERRO)
+            sd.set_mensagem(f"Erro inesperado ao remover Pokémon: {e}")
+            sd.set_codigo("500")
+            return sd.get_resumo()

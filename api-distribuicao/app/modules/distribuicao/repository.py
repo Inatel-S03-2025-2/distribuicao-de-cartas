@@ -32,12 +32,8 @@ class IRepository(ABC):
 
 class GerenciadorBD:
 
-    def __init__(self):
-        self.conexaoBD()
-
-    def conexaoBD(self):
-        self.session = SessionLocal()
-        self.session.rollback()
+    def __init__(self, db: Session):
+        self.session = db
 
     def createJogador(self, jogador: Jogador):
         usuario_repo = UsuarioRepository(self.session)
