@@ -127,24 +127,23 @@ Este projeto utiliza princípios de Arquitetura de Software para garantir um có
 #### Repository Pattern
 O padrão Repository foi implementado para criar uma camada de abstração entre a lógica de negócios e a camada de acesso a dados (Banco de Dados).
 
-Como foi usado: Classes como PokemonRepository e UsuarioRepository encapsulam as consultas complexas do SQLAlchemy.
+Como foi usado: Classes como **PokemonRepository** e **UsuarioRepository** encapsulam as consultas complexas do **SQLAlchemy**.
 
 Benefício ao Nosso Código: Isso permite que o restante da aplicação (como os Services e Controllers) não precise saber detalhes de como os dados são salvos ou buscados (SQL), facilitando a troca de banco de dados e a criação de testes unitários com mocks.
 
 #### Adapter Pattern
-O padrão Adapter foi utilizado para integrar a aplicação com serviços externos de forma desacoplada, entre as Classes internas do nosso código, as de conexões com o Banco de Dados e a PokeAPI.
+O padrão Adapter foi utilizado para integrar a aplicação com serviços externos de forma desacoplada, entre as Classes internas do nosso código, as de conexões com o Banco de Dados e a **PokeAPI**.
 
-Como foi usado: A classe GestorAPI atua como um adaptador para a PokeAPI externa. Ela adapta a resposta JSON complexa e "crua" da API externa para os objetos de domínio da nossa aplicação **(Pokemon)**, e também há uma tradução interna de tipos de Objeto (**ORM (Object Realational Mapper)** <-> **Dominio (Nossas Classes)**).
+Como foi usado: A classe **GestorAPI** atua como um adaptador para a **PokeAPI** externa. Ela adapta a resposta JSON complexa e "bruta" da API externa para os objetos de domínio da nossa aplicação **(Pokemon)**, e também há uma tradução interna de tipos de Objeto (**ORM (Object Realational Mapper)** <-> **Dominio (Nossas Classes)**).
 
 Benefício ao Nosso Código: Se a API externa mudar suas rotas ou formato de resposta, precisamos alterar apenas a classe adaptadora, mantendo a regra de negócio da aplicação intacta.
 
  #### Singleton Pattern
 O padrão Singleton foi aplicado para garantir o gerenciamento eficiente de recursos compartilhados.
 
-Como foi usado: A classe GestorAPI foi implementada como um Singleton. Isso garante que exista apenas uma única instância dessa classe durante todo o ciclo de vida da aplicação.
+Como foi usado: As classes **GestorAPI** e **GestorCartas** foram implementadas como Singleton. Pois isso garante que exista apenas uma única instância de cada uma dessas classes durante todo o ciclo de vida da aplicação.
 
 Benefício ao Nosso Código: Evita a criação desnecessária de múltiplas instâncias de conexão e configurações de API, economizando memória e centralizando o ponto de acesso aos dados externos.
-
 
 ---
 ## 🧱 Aplicação do Princípio SOLIDD
